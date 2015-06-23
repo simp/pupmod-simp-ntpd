@@ -96,11 +96,11 @@ class ntpd (
   }
 
   file { '/etc/ntp/keys':
-    owner    => 'root',
-    group    => 'root',
-    mode     => '0600',
-    content  => "\n",
-    notify   => Service['ntpd']
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0600',
+    content => "\n",
+    notify  => Service['ntpd']
   }
 
   file { '/var/lib/ntp':
