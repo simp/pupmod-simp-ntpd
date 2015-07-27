@@ -1,30 +1,32 @@
 logconfig <%= @logconfig.join(' ') %>
 
-<% if not @virtual.eql?('physical') then -%>
+<% if !@virtual.eql?('physical') -%>
 tinker panic 0
 
 <% end -%>
-restrict default kod nomodify notrap
+restrict default kod nomodify notrap nopeer noquery
+restrict -6 default kod nomodify notrap nopeer noquery
 
-restrict 127.0.0.1 
+restrict 127.0.0.1
+restrict -6 ::1
 
-<% if @servers.empty? then -%>
-server	127.127.1.0	# local clock
-fudge	127.127.1.0 stratum <%= @stratum %>
-<% elsif not @virtual.eql?('vmware') then -%>
-server	127.127.1.0	# local clock
-fudge	127.127.1.0 stratum 10
+<% if @servers.empty? -%>
+server  127.127.1.0 # local clock
+fudge 127.127.1.0 stratum <%= @stratum %>
+<% elsif !@virtual.eql?('vmware') -%>
+server  127.127.1.0 # local clock
+fudge 127.127.1.0 stratum 10
 <% end -%>
 
 <%
   t_servers = []
-  if @servers.kind_of?(Array) then
+  if @servers.kind_of?(Array)
     t_servers = @servers.map{|x| "server #{x}"}
   else
     @servers.keys.sort.each do |ntp_server|
-      if @servers[ntp_server] and not @servers[ntp_server].empty? then
+      if @servers[ntp_server] and !@servers[ntp_server].empty?
         t_servers << "server #{ntp_server} #{Array(@servers[ntp_server]).join(' ')}"
-      elsif not @default_options.empty? then
+      elsif !@default_options.empty?
         t_servers << "server #{ntp_server} #{Array(@default_options).join(' ')}"
       else
         t_servers << "server #{ntp_server}"
@@ -35,7 +37,7 @@ fudge	127.127.1.0 stratum 10
 
 <%= t_servers.join("\n") %>
 driftfile /var/lib/ntp/drift
-broadcastdelay	<%= @broadcastdelay %>
-<% if @disable_monitor then -%>
+broadcastdelay  <%= @broadcastdelay %>
+<% if @disable_monitor -%>
 disable monitor
 <% end -%>

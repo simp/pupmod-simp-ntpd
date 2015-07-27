@@ -6,11 +6,11 @@ t_allow = []
 
   t_str = "restrict #{t_addr}"
 
-  if t_mask then
+  if t_mask
     t_str += " mask #{t_mask}"
   end
 
-  if not @rules.empty? then
+  unless @rules.empty?
     t_str += " #{Array(@rules).join(' ')}"
   end
 
