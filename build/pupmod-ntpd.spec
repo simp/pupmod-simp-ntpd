@@ -1,7 +1,7 @@
 Summary: NTP Puppet Module
 Name: pupmod-ntpd
 Version: 4.1.0
-Release: 7
+Release: 8
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -59,6 +59,10 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Mon Jul 27 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-8
+- Updated the default restrict options to be more restrictive.
+- Ref: https://access.redhat.com/articles/1305723
+
 * Thu Feb 19 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-7
 - Migrated to the new 'simp' environment.
 

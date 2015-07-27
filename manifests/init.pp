@@ -62,18 +62,27 @@ class ntpd (
   $logconfig = ['=syncall','+clockall'],
   $broadcastdelay = '0.004',
   $default_options = ['minpoll 4', 'maxpoll 4', 'iburst'],
-  $use_auditd = false,
+  $use_auditd = hiera('use_auditd',false),
   $disable_monitor = true
 ){
+  if !is_array($servers) { validate_hash($servers) }
+  else { validate_array($servers) }
+  validate_integer($stratum)
+  validate_array($logconfig)
+  validate_float($broadcastdelay)
+  validate_array($default_options)
+  validate_bool($use_auditd)
+  validate_bool($disable_monitor)
+
   if $use_auditd {
-    include 'auditd'
+    include '::auditd'
     # Add the audit rules
     auditd::add_rules { 'ntp':
       content => "-w /etc/ntp.conf -p wa -k CFG_ntp
 -w /etc/ntp/keys -p wa -k CFG_ntp",
       require => [
         File['/etc/ntp.conf'],
-        File['/etc/ntp/keys'],
+        File['/etc/ntp/keys']
       ]
     }
   }
@@ -159,12 +168,4 @@ SYNC_HWCLOCK=yes\n",
     before     => Service['ntpd']
   }
 
-  if !is_array($servers) { validate_hash($servers) }
-  else { validate_array($servers) }
-  validate_integer($stratum)
-  validate_array($logconfig)
-  validate_float($broadcastdelay)
-  validate_array($default_options)
-  validate_bool($use_auditd)
-  validate_bool($disable_monitor)
 }

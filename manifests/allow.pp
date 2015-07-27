@@ -14,7 +14,7 @@ define ntpd::allow (
 # $rules
 #     A standard ntpd.conf restrict append rule (notrust, etc...)
     $rules = '',
-    $use_iptables = hiera('use_iptables',true)
+    $use_iptables = hiera('use_iptables',false)
 ) {
   $l_client_nets = nets2ddq($client_nets)
 
@@ -23,7 +23,7 @@ define ntpd::allow (
   }
 
   if $use_iptables {
-    include 'iptables'
+    include '::iptables'
 
     iptables::add_udp_listen { "allow_ntp_$name":
       order       => '11',
