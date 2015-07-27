@@ -4,9 +4,11 @@ logconfig <%= @logconfig.join(' ') %>
 tinker panic 0
 
 <% end -%>
-restrict default kod nomodify notrap
+restrict default kod nomodify notrap nopeer noquery
+restrict -6 default kod nomodify notrap nopeer noquery
 
 restrict 127.0.0.1 
+restrict -6 ::1
 
 <% if @servers.empty? then -%>
 server	127.127.1.0	# local clock
