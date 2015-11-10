@@ -1,14 +1,14 @@
 Summary: NTP Puppet Module
 Name: pupmod-ntpd
 Version: 4.1.0
-Release: 8
+Release: 9
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
 Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Requires: pupmod-auditd >= 4.1.0-3
 Requires: pupmod-iptables >= 4.1.0-3
-Requires: pupmod-concat >= 4.0.0-0
+Requires: pupmod-simpcat >= 4.0.0-0
 Requires: puppet >= 3.3.0
 Buildarch: noarch
 Requires: simp-bootstrap >= 4.2.0
@@ -59,6 +59,10 @@ fi
 # Post uninstall stuff
 
 %changelog
+
+* Mon Nov 09 2015 Chris Tessmer <chris.tessmer@onypoint.com> - 4.1.0-9
+- migration to simplib and simpcat (lib/ only)
+
 * Mon Jul 27 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-8
 - Updated the default restrict options to be more restrictive.
 - Ref: https://access.redhat.com/articles/1305723
