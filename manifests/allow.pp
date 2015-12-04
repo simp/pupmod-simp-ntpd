@@ -18,14 +18,14 @@ define ntpd::allow (
 ) {
   $l_client_nets = nets2ddq($client_nets)
 
-  concat_fragment { "ntpd+$name.allow":
+  concat_fragment { "ntpd+${name}.allow":
     content => template('ntpd/ntp.allow.erb')
   }
 
   if $use_iptables {
     include '::iptables'
 
-    iptables::add_udp_listen { "allow_ntp_$name":
+    iptables::add_udp_listen { "allow_ntp_${name}":
       order       => '11',
       client_nets => $client_nets,
       dports      => '123'

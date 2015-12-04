@@ -1,0 +1,45 @@
+{
+  "name":    "simp-ntpd",
+  "version": "4.1.0",
+  "author":  "simp",
+  "summary": "manages NTP server and client",
+  "license": "Apache-2.0",
+  "source":  "https://github.com/simp/pupmod-simp-ntpd",
+  "project_page": "https://github.com/simp/pupmod-simp-ntpd",
+  "issues_url":   "https://simp-project.atlassian.net",
+  "tags": [ "simp", "ntpd" ],
+  "dependencies": [
+    {
+      "name": "simp-auditd",
+      "version_requirement": ">= 4.1.0"
+    },
+    {
+      "name": "simp-iptables",
+      "version_requirement": ">= 4.1.0"
+    },
+    {
+      "name": "simp-simpcat",
+      "version_requirement": ">= 4.0.0"
+    },
+    {
+      "name": "simp-simplib",
+      "version_requirement": ">= 1.0.0"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    }
+  ]
+}
