@@ -74,6 +74,8 @@ class ntpd (
   validate_bool($use_auditd)
   validate_bool($disable_monitor)
 
+  compliance_map()
+
   if $use_auditd {
     include '::auditd'
     # Add the audit rules

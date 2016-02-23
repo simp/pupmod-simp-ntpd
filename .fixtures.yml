@@ -9,5 +9,6 @@ fixtures:
     simpcat: "git://github.com/simp/pupmod-simp-concat"
     iptables: "git://github.com/simp/pupmod-simp-iptables"
     stdlib: "git://github.com/simp/puppetlabs-stdlib"
+    compliance: "https://github.com/trevor-vaughan/pupmod-compliance"
   symlinks:
     ntpd: "#{source_dir}"
