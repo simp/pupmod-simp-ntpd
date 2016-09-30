@@ -18,7 +18,7 @@ define ntpd::allow (
 ) {
   $l_client_nets = nets2ddq($client_nets)
 
-  concat_fragment { "ntpd+${name}.allow":
+  simpcat_fragment { "ntpd+${name}.allow":
     content => template('ntpd/ntp.allow.erb')
   }
 

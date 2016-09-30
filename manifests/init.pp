@@ -89,12 +89,12 @@ class ntpd (
     }
   }
 
-  concat_build { 'ntpd':
+  simpcat_build { 'ntpd':
     order  => ['ntp.conf', '*.allow'],
     target => '/etc/ntp.conf'
   }
 
-  concat_fragment { 'ntpd+ntp.conf':
+  simpcat_fragment { 'ntpd+ntp.conf':
     content => template('ntpd/ntp.conf.erb')
   }
 
@@ -137,7 +137,7 @@ SYNC_HWCLOCK=yes\n",
     owner     => 'root',
     group     => 'ntp',
     mode      => '0600',
-    subscribe => Concat_build['ntpd'],
+    subscribe => Simpcat_build['ntpd'],
     audit     => content,
     notify    => Service['ntpd']
   }
