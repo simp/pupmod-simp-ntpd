@@ -1,6 +1,6 @@
 Obsoletes: pupmod-ntpd-test
-Requires: pupmod-simp-auditd < 6.0.0-0
-Requires: pupmod-simp-auditd >= 5.1.1-0
+Requires: pupmod-simp-auditd < 7.0.0-0
+Requires: pupmod-simp-auditd >= 6.0.0-0
 Requires: pupmod-simp-iptables < 6.0.0-0
 Requires: pupmod-simp-iptables >= 5.0.0-0
 Requires: pupmod-simp-simpcat < 7.0.0-0
