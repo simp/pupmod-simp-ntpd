@@ -20,7 +20,7 @@ describe 'ntpd' do
         end
 
         context 'with_auditd' do
-          let(:params){{ :use_auditd => true }}
+          let(:params){{ :auditd => true }}
 
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_class('auditd') }

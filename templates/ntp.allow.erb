@@ -1,7 +1,7 @@
 <%
 t_allow = []
 
-@l_client_nets.each do |lnet|
+@l_trusted_nets.each do |lnet|
   t_addr,t_mask = lnet.split('/')
 
   t_str = "restrict #{t_addr}"
@@ -10,11 +10,11 @@ t_allow = []
     t_str += " mask #{t_mask}"
   end
 
-  unless @rules.empty?
+  unless @rules
     t_str += " #{Array(@rules).join(' ')}"
   end
 
-  t_allow.push(t_str)
+  t_allow.push(t_str.strip)
 end
 -%>
 <%= t_allow.join("\n") %>

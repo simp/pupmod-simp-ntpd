@@ -1,4 +1,4 @@
 ---
-client_nets :
+simp_options::trusted_nets :
   - '1.2.3.4/24'
   - '3.4.5.6'

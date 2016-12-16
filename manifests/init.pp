@@ -39,7 +39,7 @@
 #   The default options that will be added to all servers. Set to an empty
 #   array to disable.
 #
-# [*use_auditd*]
+# [*auditd*]
 # Type: Boolean
 # Default: false
 #   If true, enable auditd monitoring of the ntp configuration files.
@@ -57,25 +57,17 @@
 #   * Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class ntpd (
-  $servers = {},
-  $stratum = '2',
-  $logconfig = ['=syncall','+clockall'],
-  $broadcastdelay = '0.004',
-  $default_options = ['minpoll 4', 'maxpoll 4', 'iburst'],
-  $use_auditd = hiera('use_auditd',false),
-  $disable_monitor = true
+  Variant[Array,Hash]  $servers         = {},
+  Integer              $stratum         = 2,
+  Array[String]        $logconfig       = ['=syncall','+clockall'],
+  Float                $broadcastdelay  = 0.004,
+  Array[String]        $default_options = ['minpoll 4', 'maxpoll 4', 'iburst'],
+  Boolean              $auditd          = simplib::lookup('simp_options::auditd',
+                                                     { 'default_value' => false}),
+  Boolean              $disable_monitor = true
 ){
-  if !is_array($servers) { validate_hash($servers) }
-  else { validate_array($servers) }
-  validate_integer($stratum)
-  validate_array($logconfig)
-  validate_float($broadcastdelay)
-  validate_array($default_options)
-  validate_bool($use_auditd)
-  validate_bool($disable_monitor)
 
-
-  if $use_auditd {
+  if $auditd {
     include '::auditd'
     # Add the audit rules
     auditd::add_rules { 'ntp':
