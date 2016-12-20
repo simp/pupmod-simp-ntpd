@@ -1,9 +1,9 @@
 Obsoletes: pupmod-ntpd-test
+Requires: pupmod-puppetlabs-concat < 3.0.0-0
+Requires: pupmod-puppetlabs-concat >= 2.2.0-0
 Requires: pupmod-simp-auditd < 8.0.0-0
 Requires: pupmod-simp-auditd >= 7.0.0-0
 Requires: pupmod-simp-iptables < 7.0.0-0
 Requires: pupmod-simp-iptables >= 6.0.0-0
-Requires: pupmod-simp-simpcat < 7.0.0-0
-Requires: pupmod-simp-simpcat >= 6.0.0-0
 Requires: pupmod-simp-simplib < 3.0.0-0
 Requires: pupmod-simp-simplib >= 2.1.0-0

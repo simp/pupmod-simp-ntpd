@@ -1,7 +1,7 @@
 * Fri Dec 16 2016 Jeanne Greulich <jgreulich.simp@onyxpoint.com> - 6.0.0-0
-- update Global Catalysts
-- strong type
-- fixed allow template to remove trailing spaces.
+- Update Global Catalysts
+- Strongly type parameters
+- Remove trailing spaces
 
 * Wed Nov 23 2016 Jeanne Greulich <jgreulich.simp@onyxpoint.com> - 5.0.0-0
 - update requirement versions
