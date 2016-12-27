@@ -51,13 +51,13 @@
 class ntpd (
   Variant[
     Array[String],
-    Hash[String, Array[String]]]     $servers         = {},
-  Integer[0]                            $stratum         = 2,
-  Array[String]                      $logconfig       = ['                                                        = syncall','+clockall'],
-  Numeric                            $broadcastdelay  = 0.004,
-  Array[String]                      $default_options = ['minpoll 4', 'maxpoll 4', 'iburst'],
-  Boolean                            $auditd          = simplib::lookup('simp_options::auditd', { 'default_value' => false}),
-  Boolean                            $disable_monitor = true
+    Hash[String, Array[String]]] $servers         = {},
+  Integer[0]                     $stratum         = 2,
+  Array[String]                  $logconfig       = ['=syncall','+clockall'],
+  Numeric                        $broadcastdelay  = 0.004,
+  Array[String]                  $default_options = ['minpoll 4','maxpoll 4','iburst'],
+  Boolean                        $auditd          = simplib::lookup('simp_options::auditd', { 'default_value' => false}),
+  Boolean                        $disable_monitor = true
 ){
 
   if $auditd {
