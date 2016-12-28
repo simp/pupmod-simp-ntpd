@@ -1,6 +1,6 @@
 {
   "name": "simp-ntpd",
-  "version": "5.0.0",
+  "version": "6.0.0",
   "author": "SIMP Team",
   "summary": "manages NTP server and client",
   "license": "Apache-2.0",
@@ -13,20 +13,24 @@
   ],
   "dependencies": [
     {
+      "name": "puppetlabs/concat",
+      "version_requirement": ">= 2.2.0 < 3.0.0"
+    },
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.9.0 < 5.0.0"
+    },
+    {
       "name": "simp/auditd",
-      "version_requirement": ">= 6.0.0 < 7.0.0"
+      "version_requirement": ">= 7.0.0 < 8.0.0"
     },
     {
       "name": "simp/iptables",
-      "version_requirement": ">= 5.0.0 < 6.0.0"
-    },
-    {
-      "name": "simp/simpcat",
       "version_requirement": ">= 6.0.0 < 7.0.0"
     },
     {
       "name": "simp/simplib",
-      "version_requirement": ">= 2.0.0 < 3.0.0"
+      "version_requirement": ">= 2.1.0 < 3.0.0"
     }
   ],
   "operatingsystem_support": [
@@ -44,5 +48,16 @@
         "7"
       ]
     }
-  ]
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": "4.x"
+    },
+    {
+      "name": "pe",
+      "version_requirement": ">= 2016.2.0"
+    }
+  ],
+  "data_provider": "hiera"
 }

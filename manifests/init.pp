@@ -1,100 +1,92 @@
-# == Class: ntpd
+# Set up ntpd in either standalone or server mode
 #
-# Set up ntpd in either standalone or server mode.
+# @see ntp.conf(5)
 #
-# == Parameters
+# @param servers
+#   An array of servers or a Hash of server/option pairs providing details
+#   for the NTP servers that this system should synchronize with
 #
-# [*servers*]
-# Type: Hash or Array
-# Default: {}
-#   An array of servers or a hash of server/option pairs providing details
-#   for the NTP servers that this system should synchronize with.
-# Example:
-#   servers => {
-#     'time.local.net' => ['iburst','minpoll 4', 'prefer'],
-#     # This one will just use $default_options
-#     'time.other.net' => []
-#   }
+#   * **Example**
 #
-# [*stratum*]
-# Type: Integer
-# Default: '2'
-#   The stratum for this system. This only comes into play if no external
-#   servers are defined and the stratum has to be fudged.
+#     ```
+#     servers => {
+#       'time.local.net' => ['iburst','minpoll 4', 'prefer'],
+#       # This one will just use $default_options
+#       'time.other.net' => []
+#     }
+#     ```
 #
-# [*log_opts*]
-# Type: Array
-# Default: ['=syncall','+clockall']
-#   A list of log options for refining the system log output. See ntp.conf(5)
-#   for details.
+# @param stratum
+#   The stratum for this system
 #
-# [*broadcastdelay*]
-# Type: Float
-# Default: '0.004'
-#   Defalut calibration delay. See ntp.conf(5) for details.
+#   * This only comes into play if no external servers are defined and the
+#     stratum has to be fudged
 #
-# [*default_options*]
-# Type: Array
-# Default: ['minpoll 4', 'maxpoll 4', 'iburst']
-#   The default options that will be added to all servers. Set to an empty
-#   array to disable.
+# @param log_opts
+#   A list of log options for refining the system log output
 #
-# [*use_auditd*]
-# Type: Boolean
-# Default: false
-#   If true, enable auditd monitoring of the ntp configuration files.
-#   This probably isn't needed in most cases since Puppet controls these files
-#   but some systems require it.
+# @param broadcastdelay
+#   Defalut calibration delay
 #
-# [*disable_monitor*]
-# Type: Boolean
-# Default: true
-#   If true, disable the monoitoring facility to prevent amplification
-#   attacks using ntpdc monlist command when default restrict does not
-#   include the noquery flag. See CVE-2013-5211 for details.
+# @param default_options
+#   The default options that will be added to all servers
 #
-# == Authors
-#   * Trevor Vaughan <tvaughan@onyxpoint.com>
+#   * Set to an empty array to disable
+#
+# @param auditd
+#   Enable auditd monitoring of the ntp configuration files
+#
+#   * This probably isn't needed in most cases since Puppet controls these
+#     files, but some systems require it
+#
+# @param disable_monitor
+#   Disable the monoitoring facility to prevent amplification attacks using
+#   ``ntpdc monlist`` command when default restrict does not include the
+#   ``noquery`` flag
+#
+#   * See CVE-2013-5211 for details
+#
+# @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class ntpd (
-  $servers = {},
-  $stratum = '2',
-  $logconfig = ['=syncall','+clockall'],
-  $broadcastdelay = '0.004',
-  $default_options = ['minpoll 4', 'maxpoll 4', 'iburst'],
-  $use_auditd = hiera('use_auditd',false),
-  $disable_monitor = true
+  Variant[
+    Array[String],
+    Hash[String, Array[String]]] $servers         = {},
+  Integer[0]                     $stratum         = 2,
+  Array[String]                  $logconfig       = ['=syncall','+clockall'],
+  Numeric                        $broadcastdelay  = 0.004,
+  Array[String]                  $default_options = ['minpoll 4','maxpoll 4','iburst'],
+  Boolean                        $auditd          = simplib::lookup('simp_options::auditd', { 'default_value' => false}),
+  Boolean                        $disable_monitor = true
 ){
-  if !is_array($servers) { validate_hash($servers) }
-  else { validate_array($servers) }
-  validate_integer($stratum)
-  validate_array($logconfig)
-  validate_float($broadcastdelay)
-  validate_array($default_options)
-  validate_bool($use_auditd)
-  validate_bool($disable_monitor)
 
-
-  if $use_auditd {
+  if $auditd {
     include '::auditd'
     # Add the audit rules
     auditd::add_rules { 'ntp':
       content => "-w /etc/ntp.conf -p wa -k CFG_ntp
 -w /etc/ntp/keys -p wa -k CFG_ntp",
       require => [
-        File['/etc/ntp.conf'],
+        Concat['/etc/ntp.conf'],
         File['/etc/ntp/keys']
       ]
     }
   }
 
-  simpcat_build { 'ntpd':
-    order  => ['ntp.conf', '*.allow'],
-    target => '/etc/ntp.conf'
+  concat { '/etc/ntp.conf':
+    owner          => 'root',
+    group          => 'ntp',
+    mode           => '0600',
+    ensure_newline => true,
+    warn           => true,
+    require        => Package['ntp'],
+    notify         => Service['ntpd']
   }
 
-  simpcat_fragment { 'ntpd+ntp.conf':
-    content => template('ntpd/ntp.conf.erb')
+  concat::fragment { 'main_ntp_configuration':
+    order   => 0,
+    target  => '/etc/ntp.conf',
+    content => template("${module_name}/ntp.conf.erb")
   }
 
   file { '/etc/ntp':
@@ -131,16 +123,6 @@ SYNC_HWCLOCK=yes\n",
     notify  => Service['ntpd']
   }
 
-  file { '/etc/ntp.conf':
-    ensure    => 'file',
-    owner     => 'root',
-    group     => 'ntp',
-    mode      => '0600',
-    subscribe => Simpcat_build['ntpd'],
-    audit     => content,
-    notify    => Service['ntpd']
-  }
-
   group { 'ntp':
     ensure    => 'present',
     allowdupe => false,
@@ -168,5 +150,4 @@ SYNC_HWCLOCK=yes\n",
     uid        => 38,
     before     => Service['ntpd']
   }
-
 }
