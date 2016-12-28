@@ -8,7 +8,9 @@ fixtures:
     augeasproviders_grub:
       repo: https://github.com/simp/augeasproviders_grub
       branch: simp-master
-    concat: https://github.com/simp/puppetlabs-concat
+    concat:
+      repo: https://github.com/simp/puppetlabs-concat
+      branch: simp-master
     iptables: https://github.com/simp/pupmod-simp-iptables
     logrotate: https://github.com/simp/pupmod-simp-logrotate
     pki: https://github.com/simp/pupmod-simp-pki

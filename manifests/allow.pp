@@ -16,8 +16,8 @@ define ntpd::allow (
   $l_trusted_nets = nets2ddq($trusted_nets)
 
   concat::fragment { "ntpd_${name}.allow":
-    order  => 100,
-    target => '/etc/ntpd.conf',
+    order   => 100,
+    target  => '/etc/ntpd.conf',
     content => template('ntpd/ntp.allow.erb')
   }
 
