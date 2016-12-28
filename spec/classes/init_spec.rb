@@ -8,9 +8,12 @@ describe 'ntpd' do
           facts
         end
 
-        it { is_expected.to compile.with_all_deps }
-        it { is_expected.to create_concat('/etc/ntp.conf') }
-        it { is_expected.to create_concat__fragment('main_ntp_configuration').with_content(/fudge\s+127\.127\.1\.0\s+stratum 2/) }
+        context 'with default parmeters' do
+          it { is_expected.to compile.with_all_deps }
+          it { is_expected.to create_concat('/etc/ntp.conf') }
+          it { is_expected.to create_concat__fragment('main_ntp_configuration').with_content(/fudge\s+127\.127\.1\.0\s+stratum 2/) }
+          it { is_expected.to_not contain_class('auditd')}
+        end
 
         context 'virtual' do
           let(:facts){{ :virtual => 'kvm' }}
@@ -19,7 +22,7 @@ describe 'ntpd' do
           it { is_expected.to create_concat__fragment('main_ntp_configuration').with_content(/tinker panic 0/) }
         end
 
-        context 'with_auditd' do
+        context 'with auditd => true' do
           let(:params){{ :auditd => true }}
 
           it { is_expected.to compile.with_all_deps }

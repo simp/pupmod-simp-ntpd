@@ -24,7 +24,7 @@ define ntpd::allow (
   if $firewall {
     include '::iptables'
 
-    iptables::add_udp_listen { "allow_ntp_${name}":
+    iptables::listen::udp { "allow_ntp_${name}":
       order        => 11,
       trusted_nets => $trusted_nets,
       dports       => 123
