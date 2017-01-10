@@ -5,5 +5,5 @@ Requires: pupmod-simp-auditd < 8.0.0-0
 Requires: pupmod-simp-auditd >= 7.0.0-0
 Requires: pupmod-simp-iptables < 7.0.0-0
 Requires: pupmod-simp-iptables >= 6.0.0-0
-Requires: pupmod-simp-simplib < 3.0.0-0
-Requires: pupmod-simp-simplib >= 2.1.0-0
+Requires: pupmod-simp-simplib < 4.0.0-0
+Requires: pupmod-simp-simplib >= 3.1.0-0
