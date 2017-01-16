@@ -13,11 +13,13 @@ define ntpd::allow (
   Optional[String] $rules        = undef,
   Boolean          $firewall     = simplib::lookup('simp_options::firewall', { 'default_value' => false})
 ) {
+  include 'ntpd'
+
   $l_trusted_nets = nets2ddq($trusted_nets)
 
   concat::fragment { "ntpd_${name}.allow":
     order   => 100,
-    target  => '/etc/ntpd.conf',
+    target  => '/etc/ntp.conf',
     content => template('ntpd/ntp.allow.erb')
   }
 

@@ -9,9 +9,6 @@ describe 'ntpd::allow' do
         let(:facts){ facts }
         let(:title){ 'test' }
 
-        let :pre_condition do
-          'concat { "/etc/ntp.config": }'
-        end
         context 'with default parameters' do
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_concat__fragment("ntpd_#{title}.allow").with_content(<<-EOF.gsub(/^\s+/,'')
