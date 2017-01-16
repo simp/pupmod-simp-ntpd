@@ -10,7 +10,6 @@ fixtures:
       branch: master
     concat: https://github.com/simp/puppetlabs-concat
     iptables: https://github.com/simp/pupmod-simp-iptables
-    simpcat: https://github.com/simp/pupmod-simp-simpcat
     logrotate: https://github.com/simp/pupmod-simp-logrotate
     pki: https://github.com/simp/pupmod-simp-pki
     rsyslog: https://github.com/simp/pupmod-simp-rsyslog

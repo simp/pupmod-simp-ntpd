@@ -14,7 +14,11 @@ before_script:
 bundler_args: --without development system_tests
 before_install: rm Gemfile.lock || true
 script:
-  - bundle exec rake test
+  # There is an issue with concurency with this test, so for now we will separate the steps out
+  # - bundle exec rake test
+  - bundle exec rake metadata
+  - bundle exec rake validate
+  - bundle exec rake spec
 notifications:
   email: false
 rvm:
