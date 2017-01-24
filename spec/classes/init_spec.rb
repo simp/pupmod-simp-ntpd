@@ -27,7 +27,7 @@ describe 'ntpd' do
 
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_class('auditd') }
-          it { is_expected.to create_auditd__add_rules('ntp') }
+          it { is_expected.to create_auditd__rule('ntp') }
         end
 
         context 'with_servers_hash' do

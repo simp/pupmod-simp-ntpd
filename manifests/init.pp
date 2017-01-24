@@ -63,7 +63,7 @@ class ntpd (
   if $auditd {
     include '::auditd'
     # Add the audit rules
-    auditd::add_rules { 'ntp':
+    auditd::rule { 'ntp':
       content => "-w /etc/ntp.conf -p wa -k CFG_ntp
 -w /etc/ntp/keys -p wa -k CFG_ntp",
       require => [
