@@ -51,7 +51,7 @@
 class ntpd (
   Variant[
     Array[String],
-    Hash[String, Array[String]]] $servers         = {},
+    Hash[String, Array[String]]] $servers         = simplib::lookup('simp_options::ntpd::servers', { 'default_value' => {} }),
   Integer[0]                     $stratum         = 2,
   Array[String]                  $logconfig       = ['=syncall','+clockall'],
   Numeric                        $broadcastdelay  = 0.004,
