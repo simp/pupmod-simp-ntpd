@@ -1,3 +1,6 @@
+* Tue Mar 28 2017 Nick Miller <nick.miller@onyxpoint.com> - 6.0.1-0
+- ntpd::servers now pulls from simp_options as expected
+
 * Fri Dec 16 2016 Jeanne Greulich <jgreulich.simp@onyxpoint.com> - 6.0.0-0
 - Update Global Catalysts
 - Strongly type parameters
