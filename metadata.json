@@ -1,6 +1,6 @@
 {
   "name": "simp-ntpd",
-  "version": "6.0.2",
+  "version": "6.0.3",
   "author": "SIMP Team",
   "summary": "manages NTP server and client",
   "license": "Apache-2.0",
@@ -15,7 +15,7 @@
   "dependencies": [
     {
       "name": "puppetlabs/concat",
-      "version_requirement": ">= 2.2.0 < 3.0.0"
+      "version_requirement": ">= 2.2.0 < 4.0.0"
     },
     {
       "name": "puppetlabs/stdlib",
