@@ -26,7 +26,7 @@
 #   A list of options for refining the system log output
 #
 # @param broadcastdelay
-#   Defalut calibration delay
+#   Default calibration delay
 #
 # @param default_options
 #   The default options that will be added to all servers
