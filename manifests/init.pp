@@ -22,9 +22,6 @@
 #   * This only comes into play if no external servers are defined and the
 #     stratum has to be fudged
 #
-# @param log_opts
-#   A list of log options for refining the system log output
-#
 # @param broadcastdelay
 #   Defalut calibration delay
 #
