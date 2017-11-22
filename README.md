@@ -1,6 +1,6 @@
 [![License](http://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html) [![Build Status](https://travis-ci.org/simp/pupmod-simp-ntpd.svg)](https://travis-ci.org/simp/pupmod-simp-ntpd) [![SIMP compatibility](https://img.shields.io/badge/SIMP%20compatibility-6.*-orange.svg)](https://img.shields.io/badge/SIMP%20compatibility-6.*-orange.svg)
 
-# ntpd
+# pupmod-simp-ntpd
 
 #### Table of Contents
 
