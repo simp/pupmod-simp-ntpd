@@ -125,8 +125,10 @@ If enabled, allow connections from `trusted_nets`
 
 ## Limitations
 
-SIMP Puppet modules are generally intended to be used on a Red Hat Enterprise
-Linux-compatible distribution.
+SIMP Puppet modules are generally intended for use on Red Hat Enterprise
+Linux and compatible distributions, such as CentOS. Please see the
+[`metadata.json` file](./metadata.json) for the most up-to-date list of
+supported operating systems, Puppet versions, and module dependencies.
 
 ## Development
 
