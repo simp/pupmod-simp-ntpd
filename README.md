@@ -101,7 +101,7 @@ Enable auditd monitoring of the ntp configuration files
 
 * disable\_monitor (`Boolean`) *(defaults to: `true`)*
 
-Disable the monoitoring facility to prevent amplification attacks using `ntpdc monlist` command when default restrict does not include the `noquery` flag
+Disable the monitoring facility to prevent amplification attacks using `ntpdc monlist` command when default restrict does not include the `noquery` flag
 
 ***See CVE-2013-5211 for details***
 

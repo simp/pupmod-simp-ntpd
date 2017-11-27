@@ -40,7 +40,7 @@
 #     files, but some systems require it
 #
 # @param disable_monitor
-#   Disable the monoitoring facility to prevent amplification attacks using
+#   Disable the monitoring facility to prevent amplification attacks using
 #   ``ntpdc monlist`` command when default restrict does not include the
 #   ``noquery`` flag
 #
