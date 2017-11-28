@@ -59,7 +59,7 @@ This module requires the following:
 
 #### Parameters
 
-* `servers` (`Variant[Array[String], Hash[String, Array[String]]]`) *(defaults to: `simplib::lookup('simp_options::ntpd::servers', { 'default_value' => {} })`)*
+* **`servers`** (`Variant[Array[String], Hash[String, Array[String]]]`) *(defaults to: `simplib::lookup('simp_options::ntpd::servers', { 'default_value' => {} })`)*
 
 An array of servers or a Hash of server/option pairs providing details for the NTP servers that this system should synchronize with
 
@@ -73,33 +73,33 @@ servers => {
 }
 ```
 
-* stratum (`Integer[0]`) *(defaults to: `2`)*
+* **`stratum`** (`Integer[0]`) *(defaults to: `2`)*
 
 The stratum for this system
 
 ***This only comes into play if no external servers are defined and the stratum has to be fudged***
 
-* logconfig (`Array[String]`) *(defaults to: `['=syncall','+clockall']`)*
+* **`logconfig`** (`Array[String]`) *(defaults to: `['=syncall','+clockall']`)*
 
 A list of options for refining the system log output
 
-* broadcastdelay (`Numeric`) *(defaults to: `0.004`)*
+* **`broadcastdelay`** (`Numeric`) *(defaults to: `0.004`)*
 
 Default calibration delay
 
-* default\_options (`Array[String]`) *(defaults to: `['minpoll 4','maxpoll 4','iburst']`)*
+* **`default\_options`** (`Array[String]`) *(defaults to: `['minpoll 4','maxpoll 4','iburst']`)*
 
 The default options that will be added to all servers
 
 ***Set to an empty array to disable***
 
-* auditd (`Boolean`) *(defaults to: `simplib::lookup('simp_options::auditd', { 'default_value' => false})`)*
+* **`auditd`** (`Boolean`) *(defaults to: `simplib::lookup('simp_options::auditd', { 'default_value' => false})`)*
 
 Enable auditd monitoring of the ntp configuration files
 
 ***This probably isn't needed in most cases since Puppet controls these files, but some systems require it***
 
-* disable\_monitor (`Boolean`) *(defaults to: `true`)*
+* **`disable\_monitor`** (`Boolean`) *(defaults to: `true`)*
 
 Disable the monitoring facility to prevent amplification attacks using `ntpdc monlist` command when default restrict does not include the `noquery` flag
 
@@ -111,15 +111,15 @@ Disable the monitoring facility to prevent amplification attacks using `ntpdc mo
 
 #### Parameters
 
-* trusted\_nets (`Simplib::Netlist`) *(defaults to: `simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1', '::1'] })`)*
+* **`trusted\_nets`** (`Simplib::Netlist`) *(defaults to: `simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1', '::1'] })`)*
 
 Networks and Hosts to allow
 
-* rules (`Optional[String]`) *(defaults to: `undef`)*
+* **`rules`** (`Optional[String]`) *(defaults to: `undef`)*
 
 A standard `ntpd.conf` restrict append rule (`notrust`, etc...)
 
-* firewall (`Boolean`) *(defaults to: `simplib::lookup('simp_options::firewall', { 'default_value' => false})`)*
+* **`firewall`** (`Boolean`) *(defaults to: `simplib::lookup('simp_options::firewall', { 'default_value' => false})`)*
 
 If enabled, allow connections from `trusted_nets`
 
