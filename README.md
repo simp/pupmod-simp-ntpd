@@ -8,7 +8,6 @@
 2. [Setup - The basics of getting started with ntpd](#setup)
     * [What ntpd affects](#what-ntpd-affects)
     * [Setup requirements](#setup-requirements)
-    * [Beginning with ntpd](#beginning-with-ntpd)
 3. [Usage - Configuration options and additional functionality](#usage)
 4. [Reference](#reference)
 5. [Limitations - OS compatibility, etc.](#limitations)
@@ -44,8 +43,6 @@ This module requires the following:
 * [simp-auditd](https://forge.puppet.com/simp/auditd)
 * [simp-iptables](https://forge.puppet.com/simp/iptables)
 * [simp-simplib](https://forge.puppet.com/simp/simplib)
-
-### Beginning with ntpd
 
 ## Usage
 
