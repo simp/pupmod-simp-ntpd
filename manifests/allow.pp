@@ -8,6 +8,9 @@
 # @param rules
 #   A standard ``ntpd.conf`` restrict append rule (``notrust``, etc...)
 #
+# @param firewall
+#   If enabled, allow connections from `trusted_nets`
+#
 define ntpd::allow (
   Simplib::Netlist $trusted_nets = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1', '::1'] }),
   Optional[String] $rules        = undef,

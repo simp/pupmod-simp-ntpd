@@ -22,11 +22,11 @@
 #   * This only comes into play if no external servers are defined and the
 #     stratum has to be fudged
 #
-# @param log_opts
-#   A list of log options for refining the system log output
+# @param logconfig
+#   A list of options for refining the system log output
 #
 # @param broadcastdelay
-#   Defalut calibration delay
+#   Default calibration delay
 #
 # @param default_options
 #   The default options that will be added to all servers
@@ -40,7 +40,7 @@
 #     files, but some systems require it
 #
 # @param disable_monitor
-#   Disable the monoitoring facility to prevent amplification attacks using
+#   Disable the monitoring facility to prevent amplification attacks using
 #   ``ntpdc monlist`` command when default restrict does not include the
 #   ``noquery`` flag
 #
