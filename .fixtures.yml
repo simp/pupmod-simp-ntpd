@@ -5,9 +5,10 @@ fixtures:
     augeasproviders_core: https://github.com/simp/augeasproviders_core
     augeasproviders_grub: https://github.com/simp/augeasproviders_grub
     concat:
-      # master is at 4.0.1, but we are bound to < 4.0.0 in our metadata.json
+      # master is beyond 4.1.1, but has breaking changes to
+      # how fragments are ordered (MODULES-6625)
       repo: https://github.com/simp/puppetlabs-concat
-      ref: 3.0.0
+      ref: 4.1.1
     iptables: https://github.com/simp/pupmod-simp-iptables
     logrotate: https://github.com/simp/pupmod-simp-logrotate
     pki: https://github.com/simp/pupmod-simp-pki
