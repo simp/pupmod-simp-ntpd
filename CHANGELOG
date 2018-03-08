@@ -1,3 +1,10 @@
+* Thu Mar 08 2018 Nick Miller <nick.miller@onyxpoint.com> - 6.0.4-0
+- Manage `/etc/ntp/step-tickers`
+- Add `$package_ensure` parameter to control the `ntp` package version
+- Move some multiline strings into variables (style recommendation)
+- The module now only requires one puppet run to apply completely
+- Added essential-level acceptance test
+
 * Fri Feb 09 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 6.0.4-0
 - Update upperbound on puppetlabs/concat version to < 5.0.0
 
