@@ -14,6 +14,9 @@ describe 'ntpd' do
         it { is_expected.to_not contain_class('auditd')}
         it { is_expected.to create_file('/etc/sysconfig/ntpd').with_content(<<-EOF.gsub(/^\s+/,'')
             OPTIONS="-A -u ntp:ntp -p /var/run/ntpd.pid"
+          EOF
+        ) }
+        it { is_expected.to create_file('/etc/sysconfig/ntpdate').with_content(<<-EOF.gsub(/^\s+/,'')
             SYNC_HWCLOCK=yes
           EOF
         ) }

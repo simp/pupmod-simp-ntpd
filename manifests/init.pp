@@ -104,16 +104,20 @@ class ntpd (
     notify => Service['ntpd']
   }
 
-  $_sysconfig_content = @(EOF)
-    OPTIONS="-A -u ntp:ntp -p /var/run/ntpd.pid"
-    SYNC_HWCLOCK=yes
-    | EOF
   file { '/etc/sysconfig/ntpd':
     ensure  => 'file',
     owner   => 'root',
     group   => 'root',
     mode    => '0640',
-    content => $_sysconfig_content,
+    content => "OPTIONS=\"-A -u ntp:ntp -p /var/run/ntpd.pid\"\n",
+    notify  => Service['ntpd']
+  }
+  file { '/etc/sysconfig/ntpdate':
+    ensure  => 'file',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0640',
+    content => "SYNC_HWCLOCK=yes\n",
     notify  => Service['ntpd']
   }
 

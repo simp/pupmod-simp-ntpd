@@ -1,5 +1,7 @@
 * Thu Mar 08 2018 Nick Miller <nick.miller@onyxpoint.com> - 6.0.4-0
 - Manage `/etc/ntp/step-tickers`
+- Manage `/etc/sysconfig/ntpdate`
+  - `SYNC_HWCLOCK=yes` is now set here instead of `/etc/sysconfig/ntp`
 - Add `$package_ensure` parameter to control the `ntp` package version
 - Move some multiline strings into variables (style recommendation)
 - The module now only requires one puppet run to apply completely
