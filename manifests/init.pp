@@ -33,12 +33,6 @@
 #
 #   * Set to an empty array to disable
 #
-# @param auditd
-#   Enable auditd monitoring of the ntp configuration files
-#
-#   * This probably isn't needed in most cases since Puppet controls these
-#     files, but some systems require it
-#
 # @param disable_monitor
 #   Disable the monitoring facility to prevent amplification attacks using
 #   ``ntpdc monlist`` command when default restrict does not include the
@@ -46,10 +40,20 @@
 #
 #   * See CVE-2013-5211 for details
 #
-# @author Trevor Vaughan <tvaughan@onyxpoint.com>
+# @param manage_step_tickers Manage /etc/ntp/step-tickers
+#
+# @param auditd
+#   Enable auditd monitoring of the ntp configuration files
+#
+#   * This probably isn't needed in most cases since Puppet controls these
+#     files, but some systems require it
+#
+# @param package_ensure `ensure` parameter for the `ntp` package
+#
+# @author https://github.com/simp/pupmod-simp-ntpd/graphs/contributors
 #
 class ntpd (
-  Ntpd::Servers  $servers            = simplib::lookup('simp_options::ntpd::servers', { 'default_value' => {} }),
+  Ntpd::Servers $servers             = simplib::lookup('simp_options::ntpd::servers', { 'default_value' => {} }),
   Integer[0]    $stratum             = 2,
   Array[String] $logconfig           = ['=syncall','+clockall'],
   Numeric       $broadcastdelay      = 0.004,
