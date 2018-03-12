@@ -1,9 +1,9 @@
 require 'spec_helper_acceptance'
 require 'json'
 
-test_name 'prepare system for kubeadm'
+test_name 'ntp'
 
-describe 'prepare system for kubeadm' do
+describe 'ntpd' do
   let(:hiera) {{
     'simp_options::ntpd::servers' => [
       '0.rhel.pool.ntp.org',
@@ -48,9 +48,16 @@ describe 'prepare system for kubeadm' do
         its(:content) { should match(step_tickers) }
       end
 
-      describe file('/etc/sysconfig/ntpd') do
-        it { should be_file }
-        its(:content) { should match(%r{OPTIONS="-A -u ntp:ntp -p /var/run/ntpd.pid"}) }
+      it 'should set /etc/sysconfig/ntpd appropriately' do
+        on(host, 'cat /etc/sysconfig/ntpd') do
+          case host[:platform]
+          when /el-6-x86_64/
+            content = %s{OPTIONS="-A -u ntp:ntp -p /var/run/ntpd.pid"}
+          when /el-7-x86_64/
+            content = %s{OPTIONS="-g"}
+          end
+          assert_match stdout.chomp, content
+        end
       end
 
       describe file('/etc/sysconfig/ntpdate') do

@@ -2,6 +2,8 @@
 #
 # @see ntp.conf(5)
 #
+# @param ntpd_options Options for the ntp daemon, put into `/etc/sysconfig/ntpd`
+#
 # @param servers
 #   An array of servers or a Hash of server/option pairs providing details
 #   for the NTP servers that this system should synchronize with
@@ -40,7 +42,17 @@
 #
 #   * See CVE-2013-5211 for details
 #
-# @param manage_step_tickers Manage /etc/ntp/step-tickers
+# @param manage_ntpdate Manage ntpdate settings
+#
+# @param ntpdate_servers NTP servers that are used in the ntpdate script at startup
+#
+# @param ntpdate_sync_hwclock Set to `true` to sync hw clock after successful
+#   ntpdate. Set in `/etc/sysconfig/ntpdate`
+#
+# @param ntpdate_retry Number of retries before giving up. Set in
+#   `/etc/sysconfig/ntpdate`
+#
+# @param ntpdate_options Options for ntpdate. Set in `/etc/sysconfig/ntpdate`
 #
 # @param auditd
 #   Enable auditd monitoring of the ntp configuration files
@@ -53,16 +65,25 @@
 # @author https://github.com/simp/pupmod-simp-ntpd/graphs/contributors
 #
 class ntpd (
-  Ntpd::Servers $servers             = simplib::lookup('simp_options::ntpd::servers', { 'default_value' => {} }),
-  Integer[0]    $stratum             = 2,
-  Array[String] $logconfig           = ['=syncall','+clockall'],
-  Numeric       $broadcastdelay      = 0.004,
-  Array[String] $default_options     = ['minpoll 4','maxpoll 4','iburst'],
-  Boolean       $disable_monitor     = true,
-  Boolean       $manage_step_tickers = true,
-  Boolean       $auditd              = simplib::lookup('simp_options::auditd', { 'default_value' => false}),
-  String        $package_ensure      = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
-){
+  String           $ntpd_options,
+  Ntpd::Servers    $servers              = simplib::lookup('simp_options::ntpd::servers', { 'default_value' => {} }),
+  Integer[0]       $stratum              = 2,
+  Array[String]    $logconfig            = ['=syncall','+clockall'],
+  Numeric          $broadcastdelay       = 0.004,
+  Array[String]    $default_options      = ['minpoll 4','maxpoll 4','iburst'],
+  Boolean          $disable_monitor      = true,
+  Boolean          $manage_ntpdate       = true,
+  Ntpd::Servers    $ntpdate_servers      = $servers,
+  Boolean          $ntpdate_sync_hwclock = true,
+  Integer          $ntpdate_retry        = 2,
+  Optional[String] $ntpdate_options      = undef,
+  Boolean          $auditd               = simplib::lookup('simp_options::auditd', { 'default_value' => false}),
+  String           $package_ensure       = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
+) {
+
+  if $manage_ntpdate {
+    include 'ntpd::ntpdate'
+  }
 
   concat { '/etc/ntp.conf':
     owner          => 'root',
@@ -109,27 +130,7 @@ class ntpd (
     owner   => 'root',
     group   => 'root',
     mode    => '0640',
-    content => "OPTIONS=\"-A -u ntp:ntp -p /var/run/ntpd.pid\"\n",
-    notify  => Service['ntpd']
-  }
-  file { '/etc/sysconfig/ntpdate':
-    ensure  => 'file',
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0640',
-    content => "SYNC_HWCLOCK=yes\n",
-    notify  => Service['ntpd']
-  }
-
-  if $servers =~ Array {
-    $_servers = $servers
-  }
-  else {
-    $_servers = $servers.keys
-  }
-  file { '/etc/ntp/step-tickers':
-    ensure  => 'file',
-    content => epp("${module_name}/step-tickers.epp", { 'ntp_servers' => $_servers }),
+    content => "OPTIONS=\"${ntpd_options}\"\n",
     notify  => Service['ntpd']
   }
 

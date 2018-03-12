@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 describe 'ntpd' do
-  on_supported_os.each do |os, facts|
+  on_supported_os.each do |os, os_facts|
     context "on #{os}" do
       let(:facts) do
-        facts
+        os_facts
       end
 
       context 'with default parmeters' do
@@ -12,18 +12,39 @@ describe 'ntpd' do
         it { is_expected.to create_concat('/etc/ntp.conf') }
         it { is_expected.to create_concat__fragment('main_ntp_configuration').with_content(/fudge\s+127\.127\.1\.0\s+stratum 2/) }
         it { is_expected.to_not contain_class('auditd')}
-        it { is_expected.to create_file('/etc/sysconfig/ntpd').with_content(<<-EOF.gsub(/^\s+/,'')
-            OPTIONS="-A -u ntp:ntp -p /var/run/ntpd.pid"
-          EOF
-        ) }
-        it { is_expected.to create_file('/etc/sysconfig/ntpdate').with_content(<<-EOF.gsub(/^\s+/,'')
+        if os =~ /7/
+          it { is_expected.to create_file('/etc/sysconfig/ntpd').with_content(%r{OPTIONS="-g"}) }
+          it { is_expected.to create_file('/etc/sysconfig/ntpdate').with_content(<<-EOF.gsub(/^\s+/,'')
+            # Configuration for the ntpdate script that runs at boot
+            # This file is managed by Puppet (module: ntp)
+            # Options for ntpdate
+            OPTIONS="-p 2"
+            # Number of retries before giving up
+            RETRY=2
+            # Set to 'yes' to sync hw clock after successful ntpdate
             SYNC_HWCLOCK=yes
-          EOF
-        ) }
+            EOF
+          ) }
+        else
+          it { is_expected.to create_file('/etc/sysconfig/ntpd').with_content(%r{OPTIONS="-A -u ntp:ntp -p /var/run/ntpd.pid"}) }
+          it { is_expected.to create_file('/etc/sysconfig/ntpdate').with_content(<<-EOF.gsub(/^\s+/,'')
+            # Configuration for the ntpdate script that runs at boot
+            # This file is managed by Puppet (module: ntp)
+            # Options for ntpdate
+            OPTIONS="-U ntp -s -b"
+            # Number of retries before giving up
+            RETRY=2
+            # Set to 'yes' to sync hw clock after successful ntpdate
+            SYNC_HWCLOCK=yes
+            EOF
+          ) }
+        end
       end
 
       context 'virtual' do
-        let(:facts){{ :virtual => 'kvm' }}
+        let(:facts) {
+          os_facts.merge({:virtual => 'kvm'})
+        }
 
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to create_concat__fragment('main_ntp_configuration').with_content(/tinker panic 0/) }

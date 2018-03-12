@@ -1,0 +1,3 @@
+---
+ntpd::ntpd_options: '-g'
+ntpd::ntpdate_options: '-p 2'
