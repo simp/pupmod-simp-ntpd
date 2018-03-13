@@ -1,0 +1,22 @@
+# This file is managed by Puppet. DO NOT EDIT.
+logconfig =syncall +clockall
+
+tinker panic 0
+
+restrict default kod nomodify notrap nopeer noquery
+restrict -6 default kod nomodify notrap nopeer noquery
+
+restrict 127.0.0.1
+restrict -6 ::1
+
+server  127.127.1.0 # local clock
+fudge 127.127.1.0 stratum 10
+
+
+server 0.rhel.pool.ntp.org
+server 1.rhel.pool.ntp.org
+server 2.rhel.pool.ntp.org
+server 3.rhel.pool.ntp.org
+driftfile /var/lib/ntp/drift
+broadcastdelay  0.004
+disable monitor

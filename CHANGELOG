@@ -1,7 +1,19 @@
-* Fri Feb 09 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 6.0.4-0
+* Thu Mar 08 2018 Nick Miller <nick.miller@onyxpoint.com> - 6.1.0-0
+- Manage ntpdate via `ntpd::ntpdate`
+  - Manage `/etc/ntp/step-tickers`
+  - Manage `/etc/sysconfig/ntpdate`
+    - New params ntpdate_sync_hwclock, ntpdate_retrym and ntpdate_options should
+      cover all options from RedHat
+    - `SYNC_HWCLOCK=yes` is now set here instead of `/etc/sysconfig/ntp`
+- Add `$package_ensure` parameter to control the `ntp` package version
+- Move some multiline strings into variables (style recommendation)
+- The module now only requires one puppet run to apply completely
+- Added essential-level acceptance test
+
+* Fri Feb 09 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 6.1.0-0
 - Update upperbound on puppetlabs/concat version to < 5.0.0
 
-* Wed Nov 22 2017 Steven Pritchard <steven.pritchard@onyxpoint.com> - 6.0.4-0
+* Wed Nov 22 2017 Steven Pritchard <steven.pritchard@onyxpoint.com> - 6.1.0-0
 - Documentation updates
 
 * Fri Aug 18 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 6.0.3-0

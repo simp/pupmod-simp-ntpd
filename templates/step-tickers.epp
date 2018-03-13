@@ -1,0 +1,6 @@
+<% | Array $ntp_servers | -%>
+# List of NTP servers used by the ntpdate service.
+# This file is managed by Puppet (module: ntp)
+<% $ntp_servers.each |$server| { -%>
+<%= $server %>
+<% } -%>

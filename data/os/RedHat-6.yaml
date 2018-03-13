@@ -1,0 +1,3 @@
+---
+ntpd::ntpd_options: '-A -u ntp:ntp -p /var/run/ntpd.pid'
+ntpd::ntpdate_options: '-U ntp -s -b'

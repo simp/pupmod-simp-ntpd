@@ -1,0 +1,15 @@
+<% |
+  Enum['yes','no'] $sync_hwclock,
+  Integer $retry,
+  String $options,
+| -%>
+# Configuration for the ntpdate script that runs at boot
+# This file is managed by Puppet (module: ntp)
+<% if $options { -%>
+# Options for ntpdate
+OPTIONS="<%= $options %>"
+<% } -%>
+# Number of retries before giving up
+RETRY=<%= $retry %>
+# Set to 'yes' to sync hw clock after successful ntpdate
+SYNC_HWCLOCK=<%= $sync_hwclock %>

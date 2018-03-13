@@ -2,6 +2,8 @@
 #
 # @see ntp.conf(5)
 #
+# @param ntpd_options Options for the ntp daemon, put into `/etc/sysconfig/ntpd`
+#
 # @param servers
 #   An array of servers or a Hash of server/option pairs providing details
 #   for the NTP servers that this system should synchronize with
@@ -33,12 +35,6 @@
 #
 #   * Set to an empty array to disable
 #
-# @param auditd
-#   Enable auditd monitoring of the ntp configuration files
-#
-#   * This probably isn't needed in most cases since Puppet controls these
-#     files, but some systems require it
-#
 # @param disable_monitor
 #   Disable the monitoring facility to prevent amplification attacks using
 #   ``ntpdc monlist`` command when default restrict does not include the
@@ -46,31 +42,47 @@
 #
 #   * See CVE-2013-5211 for details
 #
-# @author Trevor Vaughan <tvaughan@onyxpoint.com>
+# @param manage_ntpdate Manage ntpdate settings
+#
+# @param ntpdate_servers NTP servers that are used in the ntpdate script at startup
+#
+# @param ntpdate_sync_hwclock Set to `true` to sync hw clock after successful
+#   ntpdate. Set in `/etc/sysconfig/ntpdate`
+#
+# @param ntpdate_retry Number of retries before giving up. Set in
+#   `/etc/sysconfig/ntpdate`
+#
+# @param ntpdate_options Options for ntpdate. Set in `/etc/sysconfig/ntpdate`
+#
+# @param auditd
+#   Enable auditd monitoring of the ntp configuration files
+#
+#   * This probably isn't needed in most cases since Puppet controls these
+#     files, but some systems require it
+#
+# @param package_ensure `ensure` parameter for the `ntp` package
+#
+# @author https://github.com/simp/pupmod-simp-ntpd/graphs/contributors
 #
 class ntpd (
-  Variant[
-    Array[String],
-    Hash[String, Array[String]]] $servers         = simplib::lookup('simp_options::ntpd::servers', { 'default_value' => {} }),
-  Integer[0]                     $stratum         = 2,
-  Array[String]                  $logconfig       = ['=syncall','+clockall'],
-  Numeric                        $broadcastdelay  = 0.004,
-  Array[String]                  $default_options = ['minpoll 4','maxpoll 4','iburst'],
-  Boolean                        $auditd          = simplib::lookup('simp_options::auditd', { 'default_value' => false}),
-  Boolean                        $disable_monitor = true
-){
+  String           $ntpd_options,
+  Ntpd::Servers    $servers              = simplib::lookup('simp_options::ntpd::servers', { 'default_value' => {} }),
+  Integer[0]       $stratum              = 2,
+  Array[String]    $logconfig            = ['=syncall','+clockall'],
+  Numeric          $broadcastdelay       = 0.004,
+  Array[String]    $default_options      = ['minpoll 4','maxpoll 4','iburst'],
+  Boolean          $disable_monitor      = true,
+  Boolean          $manage_ntpdate       = true,
+  Ntpd::Servers    $ntpdate_servers      = $servers,
+  Boolean          $ntpdate_sync_hwclock = true,
+  Integer          $ntpdate_retry        = 2,
+  Optional[String] $ntpdate_options      = undef,
+  Boolean          $auditd               = simplib::lookup('simp_options::auditd', { 'default_value' => false}),
+  String           $package_ensure       = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
+) {
 
-  if $auditd {
-    include '::auditd'
-    # Add the audit rules
-    auditd::rule { 'ntp':
-      content => "-w /etc/ntp.conf -p wa -k CFG_ntp
--w /etc/ntp/keys -p wa -k CFG_ntp",
-      require => [
-        Concat['/etc/ntp.conf'],
-        File['/etc/ntp/keys']
-      ]
-    }
+  if $manage_ntpdate {
+    include 'ntpd::ntpdate'
   }
 
   concat { '/etc/ntp.conf':
@@ -84,9 +96,9 @@ class ntpd (
   }
 
   concat::fragment { 'main_ntp_configuration':
-    order   => 0,
     target  => '/etc/ntp.conf',
-    content => template("${module_name}/ntp.conf.erb")
+    content => template("${module_name}/ntp.conf.erb"),
+    order   => 0,
   }
 
   file { '/etc/ntp':
@@ -118,8 +130,7 @@ class ntpd (
     owner   => 'root',
     group   => 'root',
     mode    => '0640',
-    content => "OPTIONS=\"-A -u ntp:ntp -p /var/run/ntpd.pid\"
-SYNC_HWCLOCK=yes\n",
+    content => "OPTIONS=\"${ntpd_options}\"\n",
     notify  => Service['ntpd']
   }
 
@@ -128,16 +139,6 @@ SYNC_HWCLOCK=yes\n",
     allowdupe => false,
     gid       => 38,
     before    => Service['ntpd']
-  }
-
-  package { 'ntp': ensure => latest }
-
-  service { 'ntpd':
-    ensure     => running,
-    enable     => true,
-    hasrestart => true,
-    hasstatus  => true,
-    require    => Package['ntp']
   }
 
   user { 'ntp':
@@ -150,4 +151,35 @@ SYNC_HWCLOCK=yes\n",
     uid        => 38,
     before     => Service['ntpd']
   }
+
+  package { 'ntp':
+    ensure => $package_ensure,
+    before => User['ntp']
+  }
+
+  service { 'ntpd':
+    ensure     => running,
+    enable     => true,
+    hasrestart => true,
+    hasstatus  => true,
+    require    => Package['ntp']
+  }
+
+  if $auditd {
+    include '::auditd'
+
+    $_audit_rule = @(EOF)
+      -w /etc/ntp.conf -p wa -k CFG_ntp
+      -w /etc/ntp/keys -p wa -k CFG_ntp
+      | EOF
+    # Add the audit rules
+    auditd::rule { 'ntp':
+      content => $_audit_rule,
+      require => [
+        Concat['/etc/ntp.conf'],
+        File['/etc/ntp/keys']
+      ]
+    }
+  }
+
 }
