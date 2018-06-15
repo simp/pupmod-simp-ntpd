@@ -9,6 +9,7 @@
 - Move some multiline strings into variables (style recommendation)
 - The module now only requires one puppet run to apply completely
 - Added essential-level acceptance test
+- Removed unneeded fixtures
 
 * Fri Feb 09 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 6.1.0-0
 - Update upperbound on puppetlabs/concat version to < 5.0.0
