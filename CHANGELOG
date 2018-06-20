@@ -1,3 +1,6 @@
+* Fri Jun 15 2018 Nick Miller <nick.miller@onyxpoint.com> - 6.1.1-0
+- Removed unneeded fixtures
+
 * Thu Mar 08 2018 Nick Miller <nick.miller@onyxpoint.com> - 6.1.0-0
 - Manage ntpdate via `ntpd::ntpdate`
   - Manage `/etc/ntp/step-tickers`
