@@ -1,6 +1,6 @@
 {
   "name": "simp-ntpd",
-  "version": "6.1.0",
+  "version": "6.1.2",
   "author": "SIMP Team",
   "summary": "manages NTP server and client",
   "license": "Apache-2.0",
@@ -23,7 +23,7 @@
     },
     {
       "name": "simp/auditd",
-      "version_requirement": ">= 7.0.0 < 8.0.0"
+      "version_requirement": ">= 7.0.0 < 9.0.0"
     },
     {
       "name": "simp/iptables",

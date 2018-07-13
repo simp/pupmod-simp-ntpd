@@ -1,5 +1,9 @@
-* Fri Mar 23 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.1.0-0
+* Fri Jul 13 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.1.2-0
 - Add support for Puppet 5 and OEL
+
+* Fri Jun 15 2018 Nick Miller <nick.miller@onyxpoint.com> - 6.1.1-0
+- Update version range of auditd dependency in metadata.json
+- Removed unneeded fixtures
 
 * Thu Mar 08 2018 Nick Miller <nick.miller@onyxpoint.com> - 6.1.0-0
 - Manage ntpdate via `ntpd::ntpdate`

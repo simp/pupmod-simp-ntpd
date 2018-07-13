@@ -182,10 +182,9 @@ pup5_latest-unit:
   <<: *spec_tests
 
 
-
 # Acceptance tests
 # ==============================================================================
-default-acceptance:
+acceptance-default:
   stage: acceptance
   tags:
     - beaker
@@ -194,9 +193,10 @@ default-acceptance:
   variables:
     PUPPET_VERSION: '4.10'
   script:
+    - bundle exec rake spec_clean
     - bundle exec rake beaker:suites[default]
 
-fips-acceptance:
+acceptance-fips-default:
   stage: acceptance
   tags:
     - beaker
@@ -206,6 +206,7 @@ fips-acceptance:
     PUPPET_VERSION: '4.10'
     BEAKER_fips: 'yes'
   script:
+    - bundle exec rake spec_clean
     - bundle exec rake beaker:suites[default]
 
 acceptance-puppet5-default:
@@ -213,7 +214,7 @@ acceptance-puppet5-default:
   tags:
     - beaker
   <<: *cache_bundler
-  <<: *setup_env_beaker
+  <<: *setup_bundler_env
   script:
     - bundle exec rake beaker:suites[default,puppet5]
 
@@ -222,7 +223,7 @@ acceptance-fips-puppet5-default:
   tags:
     - beaker
   <<: *cache_bundler
-  <<: *setup_env_beaker
+  <<: *setup_bundler_env
   variables:
     BEAKER_fips: 'yes'
   script:
@@ -233,7 +234,7 @@ acceptance-oel-puppet5-default:
   tags:
     - beaker
   <<: *cache_bundler
-  <<: *setup_env_beaker
+  <<: *setup_bundler_env
   variables:
     PUPPET_VERSION: '5.4'
   script:
