@@ -12,11 +12,10 @@ restrict -6 ::1
 server  127.127.1.0 # local clock
 fudge 127.127.1.0 stratum 10
 
-
-server 0.rhel.pool.ntp.org
-server 1.rhel.pool.ntp.org
-server 2.rhel.pool.ntp.org
-server 3.rhel.pool.ntp.org
+server 0.rhel.pool.ntp.org minpoll 4 maxpoll 4 iburst
+server 1.rhel.pool.ntp.org minpoll 4 maxpoll 4 iburst
+server 2.rhel.pool.ntp.org minpoll 4 maxpoll 4 iburst
+server 3.rhel.pool.ntp.org minpoll 4 maxpoll 4 iburst
 driftfile /var/lib/ntp/drift
 broadcastdelay  0.004
 disable monitor

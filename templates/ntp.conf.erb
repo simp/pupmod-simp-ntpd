@@ -1,5 +1,7 @@
+<% unless @logconfig.empty? -%>
 logconfig <%= @logconfig.join(' ') %>
 
+<% end -%>
 <% if !@virtual.eql?('physical') -%>
 tinker panic 0
 
@@ -13,15 +15,17 @@ restrict -6 ::1
 <% if @servers.empty? -%>
 server  127.127.1.0 # local clock
 fudge 127.127.1.0 stratum <%= @stratum %>
+
 <% elsif !@virtual.eql?('vmware') -%>
 server  127.127.1.0 # local clock
 fudge 127.127.1.0 stratum 10
-<% end -%>
 
+<% end -%>
 <%
   t_servers = []
   if @servers.kind_of?(Array)
-    t_servers = @servers.map{|x| "server #{x}"}
+    options = @default_options.empty? ? '' : " #{Array(@default_options).join(' ')}"
+    t_servers = @servers.map{|x| "server #{x}#{options}"}
   else
     @servers.keys.sort.each do |ntp_server|
       if @servers[ntp_server] and !@servers[ntp_server].empty?
@@ -34,7 +38,6 @@ fudge 127.127.1.0 stratum 10
     end
   end
 -%>
-
 <%= t_servers.join("\n") %>
 driftfile /var/lib/ntp/drift
 broadcastdelay  <%= @broadcastdelay %>

@@ -10,7 +10,27 @@ describe 'ntpd' do
       context 'with default parmeters' do
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to create_concat('/etc/ntp.conf') }
-        it { is_expected.to create_concat__fragment('main_ntp_configuration').with_content(/fudge\s+127\.127\.1\.0\s+stratum 2/) }
+        it { is_expected.to create_concat__fragment('main_ntp_configuration').with_content(<<-EOF.gsub(/^[ ]+/,'')
+            logconfig =syncall +clockall
+
+            tinker panic 0
+
+            restrict default kod nomodify notrap nopeer noquery
+            restrict -6 default kod nomodify notrap nopeer noquery
+
+            restrict 127.0.0.1
+            restrict -6 ::1
+
+            server  127.127.1.0 # local clock
+            fudge 127.127.1.0 stratum 2
+
+
+            driftfile /var/lib/ntp/drift
+            broadcastdelay  0.004
+            disable monitor
+            EOF
+        ) }
+
         it { is_expected.to_not contain_class('auditd')}
         if os =~ /7/
           it { is_expected.to create_file('/etc/sysconfig/ntpd').with_content(%r{OPTIONS="-g"}) }
@@ -71,7 +91,28 @@ describe 'ntpd' do
         }}
 
         it { is_expected.to compile.with_all_deps }
-        it { is_expected.to create_concat__fragment('main_ntp_configuration').with_content(/fudge\s+127\.127\.1\.0\s+stratum 10/) }
+        it { is_expected.to create_concat__fragment('main_ntp_configuration').with_content(<<-EOF.gsub(/^[ ]+/,'')
+            logconfig =syncall +clockall
+
+            tinker panic 0
+
+            restrict default kod nomodify notrap nopeer noquery
+            restrict -6 default kod nomodify notrap nopeer noquery
+
+            restrict 127.0.0.1
+            restrict -6 ::1
+
+            server  127.127.1.0 # local clock
+            fudge 127.127.1.0 stratum 10
+
+            server time.bar.baz minpoll 4 maxpoll 4 iburst
+            server time.other.net minpoll 4 maxpoll 4 iburst
+            driftfile /var/lib/ntp/drift
+            broadcastdelay  0.004
+            disable monitor
+            EOF
+        ) }
+
         it { is_expected.to create_file('/etc/ntp/step-tickers').with_content(<<-EOF.gsub(/^\s+/,'')
             # List of NTP servers used by the ntpdate service.
             # This file is managed by Puppet (module: ntp)
@@ -90,7 +131,28 @@ describe 'ntpd' do
         }}
 
         it { is_expected.to compile.with_all_deps }
-        it { is_expected.to create_concat__fragment('main_ntp_configuration').with_content(/fudge\s+127\.127\.1\.0\s+stratum 10/) }
+        it { is_expected.to create_concat__fragment('main_ntp_configuration').with_content(<<-EOF.gsub(/^[ ]+/,'')
+            logconfig =syncall +clockall
+
+            tinker panic 0
+
+            restrict default kod nomodify notrap nopeer noquery
+            restrict -6 default kod nomodify notrap nopeer noquery
+
+            restrict 127.0.0.1
+            restrict -6 ::1
+
+            server  127.127.1.0 # local clock
+            fudge 127.127.1.0 stratum 10
+
+            server time.bar.baz prefer
+            server time.other.net minpoll 4 maxpoll 4 iburst
+            driftfile /var/lib/ntp/drift
+            broadcastdelay  0.004
+            disable monitor
+            EOF
+        ) }
+
         it { is_expected.to create_file('/etc/ntp/step-tickers').with_content(<<-EOF.gsub(/^\s+/,'')
             # List of NTP servers used by the ntpdate service.
             # This file is managed by Puppet (module: ntp)
@@ -98,6 +160,29 @@ describe 'ntpd' do
             time.other.net
           EOF
         ) }
+      end
+
+      context 'with servers and vmware' do
+        let(:facts) {
+          os_facts.merge({:virtual => 'vmware'})
+        }
+
+        let(:params){{
+          'servers' => [
+            'time.bar.baz',
+            'time.other.net'
+          ]
+        }}
+
+        it { is_expected.to compile.with_all_deps }
+        it { is_expected.to_not create_concat__fragment('main_ntp_configuration').with_content(/server\s+127\.127\.1\.0/) }
+        it { is_expected.to_not create_concat__fragment('main_ntp_configuration').with_content(/fudge\s+127\.127\.1\.0\s+stratum/) }
+      end
+
+      context 'with logconfig empty' do
+        let(:params){{ :logconfig => [] }}
+        it { is_expected.to compile.with_all_deps }
+        it { is_expected.to_not create_concat__fragment('main_ntp_configuration').with_content(/logconfig/) }
       end
     end
   end
