@@ -1,4 +1,8 @@
-* Fri Jul 13 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.1.2-0
+* Mon Aug 27 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 6.1.1-0
+- Fixed bug in which ntpd::ntpd_options was not applied to ntpd::servers
+  when ntpd::servers is an array.
+
+* Fri Jul 13 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.1.1-0
 - Add support for Puppet 5 and OEL
 
 * Fri Jun 15 2018 Nick Miller <nick.miller@onyxpoint.com> - 6.1.1-0
