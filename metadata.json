@@ -1,6 +1,6 @@
 {
   "name": "simp-ntpd",
-  "version": "6.1.1",
+  "version": "6.2.0",
   "author": "SIMP Team",
   "summary": "manages NTP server and client",
   "license": "Apache-2.0",
@@ -60,8 +60,7 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 4.7.0 < 6.0.0"
+      "version_requirement": ">= 4.10.4 < 6.0.0"
     }
-  ],
-  "data_provider": "hiera"
+  ]
 }
