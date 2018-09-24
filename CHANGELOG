@@ -1,4 +1,4 @@
-* Mon Sep 24 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.2.1-0
+* Mon Sep 24 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.2.0-0
 - Removed nodeset symlink
 - Add symlink check to Travis config
 
