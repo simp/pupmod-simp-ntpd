@@ -1,3 +1,7 @@
+* Mon Mar 04 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 6.2.2-0
+- Expanded the upper limit of the concat and stdlib Puppet module versions
+- Updated a URL in the README.md
+
 * Wed Nov 07 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 6.2.1-0
 - Update badges in README.md
 
