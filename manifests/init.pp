@@ -2,7 +2,8 @@
 #
 # @see ntp.conf(5)
 #
-# @param ntpd_options Options for the ntp daemon, put into `/etc/sysconfig/ntpd`
+# @param ntpd_options
+#   Options for the ntp daemon, put into `/etc/sysconfig/ntpd`
 #
 # @param servers
 #   An array of servers or a Hash of server/option pairs providing details
@@ -35,6 +36,27 @@
 #
 #   * Set to an empty array to disable
 #
+# @param default_restrict
+#   The default IPv4 ``restrict`` options
+#
+# @param default_restrict6
+#   The default IPv6 ``restrict`` options
+#
+# @param admin_hosts
+#   Hosts that are allowed unrestricted access via IPv4
+#
+# @param admin_hosts6
+#   Hosts that are allowed unrestricted access via IPv6
+#
+# @param discard_average
+#   Sets the ``average`` option for ``discard``
+#
+# @param discard_minimum
+#   Sets the ``minimum`` option for ``discard``
+#
+# @param discard_monitor
+#   Sets the ``monitor`` option for ``discard``
+#
 # @param disable_monitor
 #   Disable the monitoring facility to prevent amplification attacks using
 #   ``ntpdc monlist`` command when default restrict does not include the
@@ -42,17 +64,21 @@
 #
 #   * See CVE-2013-5211 for details
 #
-# @param manage_ntpdate Manage ntpdate settings
+# @param manage_ntpdate
+#   Manage ntpdate settings
 #
-# @param ntpdate_servers NTP servers that are used in the ntpdate script at startup
+# @param ntpdate_servers
+#   NTP servers that are used in the ntpdate script at startup
 #
-# @param ntpdate_sync_hwclock Set to `true` to sync hw clock after successful
-#   ntpdate. Set in `/etc/sysconfig/ntpdate`
-#
-# @param ntpdate_retry Number of retries before giving up. Set in
+# @param ntpdate_sync_hwclock
+#   Set to `true` to sync hw clock after successful ntpdate. Set in
 #   `/etc/sysconfig/ntpdate`
 #
-# @param ntpdate_options Options for ntpdate. Set in `/etc/sysconfig/ntpdate`
+# @param ntpdate_retry
+#   Number of retries before giving up. Set in `/etc/sysconfig/ntpdate`
+#
+# @param ntpdate_options
+#   Options for ntpdate. Set in `/etc/sysconfig/ntpdate`
 #
 # @param auditd
 #   Enable auditd monitoring of the ntp configuration files
@@ -62,23 +88,40 @@
 #
 # @param package_ensure `ensure` parameter for the `ntp` package
 #
+# @param extra_content
+#   An unvalidated String that will be appended to the configuration file
+#
+# @param config_content
+#   The entire content of the configuration file. ALL OTHER ntpd CONFIGURATION
+#   OPTIONS WILL BE IGNORED.
+#
+#   * NOTE: Calls to ``ntpd::allow`` will still add ``restrict`` lines to the
+#     configuration.
+#
 # @author https://github.com/simp/pupmod-simp-ntpd/graphs/contributors
 #
 class ntpd (
-  String           $ntpd_options,
-  Ntpd::Servers    $servers              = simplib::lookup('simp_options::ntpd::servers', { 'default_value' => {} }),
-  Integer[0]       $stratum              = 2,
-  Array[String]    $logconfig            = ['=syncall','+clockall'],
-  Numeric          $broadcastdelay       = 0.004,
-  Array[String]    $default_options      = ['minpoll 4','maxpoll 4','iburst'],
-  Boolean          $disable_monitor      = true,
-  Boolean          $manage_ntpdate       = true,
-  Ntpd::Servers    $ntpdate_servers      = $servers,
-  Boolean          $ntpdate_sync_hwclock = true,
-  Integer          $ntpdate_retry        = 2,
-  Optional[String] $ntpdate_options      = undef,
-  Boolean          $auditd               = simplib::lookup('simp_options::auditd', { 'default_value' => false}),
-  String           $package_ensure       = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
+  String[1]               $ntpd_options,
+  Ntpd::Servers           $servers              = simplib::lookup('simp_options::ntpd::servers', { 'default_value' => {} }),
+  Integer[0]              $stratum              = 2,
+  Array[String[1]]        $logconfig            = ['=syncall','+clockall'],
+  Numeric                 $broadcastdelay       = 0.004,
+  Array[String[1]]        $default_options      = ['minpoll 4','maxpoll 4','iburst'],
+  Array[Ntpd::Restrict]   $default_restrict     = ['kod', 'nomodify', 'notrap', 'nopeer', 'noquery'],
+  Array[Ntpd::Restrict]   $default_restrict6    = $default_restrict,
+  Array[Simplib::IP::V4]  $admin_hosts          = ['127.0.0.1'],
+  Array[Simplib::IP::V6]  $admin_hosts6         = ['::1'],
+  Optional[Ntpd::Discard] $discard              = undef,
+  Boolean                 $disable_monitor      = true,
+  Boolean                 $manage_ntpdate       = true,
+  Ntpd::Servers           $ntpdate_servers      = $servers,
+  Boolean                 $ntpdate_sync_hwclock = true,
+  Integer[0]              $ntpdate_retry        = 2,
+  Optional[String[1]]     $ntpdate_options      = undef,
+  Boolean                 $auditd               = simplib::lookup('simp_options::auditd', { 'default_value' => false}),
+  String                  $package_ensure       = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
+  Optional[String[1]]     $extra_content        = undef,
+  Optional[String[1]]     $config_content       = undef
 ) {
 
   if $manage_ntpdate {
