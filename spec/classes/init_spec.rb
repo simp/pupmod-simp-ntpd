@@ -11,9 +11,6 @@ describe 'ntpd' do
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to create_concat('/etc/ntp.conf') }
         it { is_expected.to create_concat__fragment('main_ntp_configuration').with_content(<<-EOF.gsub(/^[ ]+/,'')
-            # This file managed by Puppet
-            # Any manual changes will be overwritten on the next Puppet run
-
             logconfig =syncall +clockall
 
             tinker panic 0
@@ -95,9 +92,6 @@ describe 'ntpd' do
 
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to create_concat__fragment('main_ntp_configuration').with_content(<<-EOF.gsub(/^[ ]+/,'')
-            # This file managed by Puppet
-            # Any manual changes will be overwritten on the next Puppet run
-
             logconfig =syncall +clockall
 
             tinker panic 0
@@ -138,9 +132,6 @@ describe 'ntpd' do
 
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to create_concat__fragment('main_ntp_configuration').with_content(<<-EOF.gsub(/^[ ]+/,'')
-            # This file managed by Puppet
-            # Any manual changes will be overwritten on the next Puppet run
-
             logconfig =syncall +clockall
 
             tinker panic 0
@@ -178,9 +169,6 @@ describe 'ntpd' do
 
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to create_concat__fragment('main_ntp_configuration').with_content(<<-EOF.gsub(/^[ ]+/,'')
-            # This file managed by Puppet
-            # Any manual changes will be overwritten on the next Puppet run
-
             logconfig =syncall +clockall
 
             tinker panic 0
@@ -215,9 +203,6 @@ describe 'ntpd' do
 
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to create_concat__fragment('main_ntp_configuration').with_content(<<-EOF.gsub(/^[ ]+/,'')
-            # This file managed by Puppet
-            # Any manual changes will be overwritten on the next Puppet run
-
             # Begin user-defined configuration
             This is all you get
             # End user-defined configuration

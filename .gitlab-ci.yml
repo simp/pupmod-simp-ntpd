@@ -92,7 +92,6 @@ variables:
     MATRIX_RUBY_VERSION: '2.4'
 
 .pup_6: &pup_6
-  allow_failure: true
   image: 'ruby:2.5'
   variables:
     PUPPET_VERSION: '~> 6.0'
@@ -222,3 +221,14 @@ pup5.5.7-oel-fips:
   script:
     - 'BEAKER_fips=yes bundle exec rake beaker:suites[default,oel]'
 
+pup6:
+  <<: *pup_6
+  <<: *acceptance_base
+  script:
+    - 'bundle exec rake beaker:suites'
+
+pup6-fips:
+  <<: *pup_6
+  <<: *acceptance_base
+  script:
+    - 'BEAKER_fips=yes bundle exec rake beaker:suites'
