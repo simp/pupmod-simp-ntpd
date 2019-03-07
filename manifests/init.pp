@@ -48,14 +48,9 @@
 # @param admin_hosts6
 #   Hosts that are allowed unrestricted access via IPv6
 #
-# @param discard_average
-#   Sets the ``average`` option for ``discard``
-#
-# @param discard_minimum
-#   Sets the ``minimum`` option for ``discard``
-#
-# @param discard_monitor
-#   Sets the ``monitor`` option for ``discard``
+# @param discard
+#   An optional has that can be used to set the average,minimum and
+#   monitor options for ``discard``
 #
 # @param disable_monitor
 #   Disable the monitoring facility to prevent amplification attacks using

@@ -127,6 +127,10 @@ describe 'ntpd' do
           'servers' => {
             'time.bar.baz' => ['prefer'],
             'time.other.net' => []
+          },
+          'discard' => {
+            'average' => 3,
+            'minimum' => 0,
           }
         }}
 
@@ -136,6 +140,7 @@ describe 'ntpd' do
 
             tinker panic 0
 
+            discard average 3 minimum 0
             restrict default kod nomodify notrap nopeer noquery
             restrict -6 default kod nomodify notrap nopeer noquery
 
