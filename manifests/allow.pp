@@ -12,9 +12,11 @@
 #   If enabled, allow connections from `trusted_nets`
 #
 define ntpd::allow (
-  Optional[String[1]] $rules        = undef,
-  Simplib::Netlist    $trusted_nets = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1', '::1'] }),
-  Boolean             $firewall     = simplib::lookup('simp_options::firewall', { 'default_value' => false})
+  Optional[Variant[
+    String[1],Array[Ntpd::Restrict]
+  ]]               $rules        = undef,
+  Simplib::Netlist $trusted_nets = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1', '::1'] }),
+  Boolean          $firewall     = simplib::lookup('simp_options::firewall', { 'default_value' => false})
 ) {
   include 'ntpd'
 
