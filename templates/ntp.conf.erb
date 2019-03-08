@@ -1,46 +1,69 @@
-<% unless @logconfig.empty? -%>
+<% if @config_content -%>
+# Begin user-defined configuration
+<%= @config_content %>
+# End user-defined configuration
+<% else -%>
+<%   unless @logconfig.empty? -%>
 logconfig <%= @logconfig.join(' ') %>
 
-<% end -%>
-<% if !@virtual.eql?('physical') -%>
+<%   end -%>
+<%   if !@virtual.eql?('physical') -%>
 tinker panic 0
+<%   end -%>
 
-<% end -%>
-restrict default kod nomodify notrap nopeer noquery
-restrict -6 default kod nomodify notrap nopeer noquery
+<%   if @discard -%>
+discard <%= @discard.to_a.join(' ') %>
+<%   end -%>
+<%   unless @default_restrict.empty? -%>
+restrict default <%= @default_restrict.join(' ') %>
+<%   end -%>
+<%   unless @default_restrict6.empty? -%>
+restrict -6 default <%= @default_restrict6.join(' ') %>
+<%   end -%>
 
-restrict 127.0.0.1
-restrict -6 ::1
+<%   @admin_hosts.each do |admin_host| -%>
+restrict <%= admin_host %>
+<%   end -%>
+<%   @admin_hosts6.each do |admin_host| -%>
+restrict -6 <%= admin_host %>
+<%   end -%>
 
-<% if @servers.empty? -%>
-server  127.127.1.0 # local clock
+<%   if @servers.empty? -%>
+server 127.127.1.0 # local clock
 fudge 127.127.1.0 stratum <%= @stratum %>
 
-<% elsif !@virtual.eql?('vmware') -%>
-server  127.127.1.0 # local clock
+<%   elsif !@virtual.eql?('vmware') -%>
+server 127.127.1.0 # local clock
 fudge 127.127.1.0 stratum 10
 
-<% end -%>
+<%   end -%>
 <%
-  t_servers = []
-  if @servers.kind_of?(Array)
-    options = @default_options.empty? ? '' : " #{Array(@default_options).join(' ')}"
-    t_servers = @servers.map{|x| "server #{x}#{options}"}
-  else
-    @servers.keys.sort.each do |ntp_server|
-      if @servers[ntp_server] and !@servers[ntp_server].empty?
-        t_servers << "server #{ntp_server} #{Array(@servers[ntp_server]).join(' ')}"
-      elsif !@default_options.empty?
-        t_servers << "server #{ntp_server} #{Array(@default_options).join(' ')}"
-      else
-        t_servers << "server #{ntp_server}"
+    t_servers = []
+    if @servers.kind_of?(Array)
+      options = @default_options.empty? ? '' : " #{Array(@default_options).join(' ')}"
+      t_servers = @servers.map{|x| "server #{x}#{options}"}
+    else
+      @servers.keys.sort.each do |ntp_server|
+        if @servers[ntp_server] && !@servers[ntp_server].empty?
+          t_servers << "server #{ntp_server} #{Array(@servers[ntp_server]).join(' ')}"
+        elsif !@default_options.empty?
+          t_servers << "server #{ntp_server} #{Array(@default_options).join(' ')}"
+        else
+          t_servers << "server #{ntp_server}"
+        end
       end
     end
-  end
 -%>
 <%= t_servers.join("\n") %>
 driftfile /var/lib/ntp/drift
-broadcastdelay  <%= @broadcastdelay %>
-<% if @disable_monitor -%>
+broadcastdelay <%= @broadcastdelay %>
+<%   if @disable_monitor -%>
 disable monitor
+<%   end -%>
+<%   if @extra_content -%>
+
+# Begin raw user content
+<%= @extra_content %>
+# End raw user content
+<%   end -%>
 <% end -%>

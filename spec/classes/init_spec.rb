@@ -21,12 +21,12 @@ describe 'ntpd' do
             restrict 127.0.0.1
             restrict -6 ::1
 
-            server  127.127.1.0 # local clock
+            server 127.127.1.0 # local clock
             fudge 127.127.1.0 stratum 2
 
 
             driftfile /var/lib/ntp/drift
-            broadcastdelay  0.004
+            broadcastdelay 0.004
             disable monitor
             EOF
         ) }
@@ -102,13 +102,13 @@ describe 'ntpd' do
             restrict 127.0.0.1
             restrict -6 ::1
 
-            server  127.127.1.0 # local clock
+            server 127.127.1.0 # local clock
             fudge 127.127.1.0 stratum 10
 
             server time.bar.baz minpoll 4 maxpoll 4 iburst
             server time.other.net minpoll 4 maxpoll 4 iburst
             driftfile /var/lib/ntp/drift
-            broadcastdelay  0.004
+            broadcastdelay 0.004
             disable monitor
             EOF
         ) }
@@ -127,7 +127,49 @@ describe 'ntpd' do
           'servers' => {
             'time.bar.baz' => ['prefer'],
             'time.other.net' => []
+          },
+          'discard' => {
+            'average' => 3,
+            'minimum' => 0,
           }
+        }}
+
+        it { is_expected.to compile.with_all_deps }
+        it { is_expected.to create_concat__fragment('main_ntp_configuration').with_content(<<-EOF.gsub(/^[ ]+/,'')
+            logconfig =syncall +clockall
+
+            tinker panic 0
+
+            discard average 3 minimum 0
+            restrict default kod nomodify notrap nopeer noquery
+            restrict -6 default kod nomodify notrap nopeer noquery
+
+            restrict 127.0.0.1
+            restrict -6 ::1
+
+            server 127.127.1.0 # local clock
+            fudge 127.127.1.0 stratum 10
+
+            server time.bar.baz prefer
+            server time.other.net minpoll 4 maxpoll 4 iburst
+            driftfile /var/lib/ntp/drift
+            broadcastdelay 0.004
+            disable monitor
+            EOF
+        ) }
+
+        it { is_expected.to create_file('/etc/ntp/step-tickers').with_content(<<-EOF.gsub(/^\s+/,'')
+            # List of NTP servers used by the ntpdate service.
+            # This file is managed by Puppet (module: ntp)
+            time.bar.baz
+            time.other.net
+          EOF
+        ) }
+      end
+
+      context 'with extra content' do
+        let(:params){{
+          'extra_content' => "This is some\nextra content"
         }}
 
         it { is_expected.to compile.with_all_deps }
@@ -142,23 +184,34 @@ describe 'ntpd' do
             restrict 127.0.0.1
             restrict -6 ::1
 
-            server  127.127.1.0 # local clock
-            fudge 127.127.1.0 stratum 10
+            server 127.127.1.0 # local clock
+            fudge 127.127.1.0 stratum 2
 
-            server time.bar.baz prefer
-            server time.other.net minpoll 4 maxpoll 4 iburst
+
             driftfile /var/lib/ntp/drift
-            broadcastdelay  0.004
+            broadcastdelay 0.004
             disable monitor
+
+            # Begin raw user content
+            This is some
+            extra content
+            # End raw user content
             EOF
         ) }
+      end
 
-        it { is_expected.to create_file('/etc/ntp/step-tickers').with_content(<<-EOF.gsub(/^\s+/,'')
-            # List of NTP servers used by the ntpdate service.
-            # This file is managed by Puppet (module: ntp)
-            time.bar.baz
-            time.other.net
-          EOF
+      context 'with fully user-defined content' do
+        let(:params){{
+          'config_content' => 'This is all you get',
+          'extra_content' => "This is some\nextra content"
+        }}
+
+        it { is_expected.to compile.with_all_deps }
+        it { is_expected.to create_concat__fragment('main_ntp_configuration').with_content(<<-EOF.gsub(/^[ ]+/,'')
+            # Begin user-defined configuration
+            This is all you get
+            # End user-defined configuration
+            EOF
         ) }
       end
 
