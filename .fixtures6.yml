@@ -2,6 +2,7 @@
 fixtures:
   repositories:
     auditd: https://github.com/simp/pupmod-simp-auditd
+    augeas_core: https://github.com/simp/pupmod-puppetlabs-augeas_core
     augeasproviders_core: https://github.com/simp/augeasproviders_core
     augeasproviders_grub: https://github.com/simp/augeasproviders_grub
     concat: https://github.com/simp/puppetlabs-concat
