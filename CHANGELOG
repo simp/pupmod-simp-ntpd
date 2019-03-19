@@ -1,3 +1,6 @@
+* Tue Mar 19 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 6.3.1-0
+- Use simplib::nets2ddq in lieu of deprecated Puppet 3 nets2ddq
+
 * Wed Mar 06 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.3.0-0
 - Validated Puppet 6 support
 - Ensure that users can change the default 'restrict' parameters

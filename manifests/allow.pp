@@ -20,7 +20,7 @@ define ntpd::allow (
 ) {
   include 'ntpd'
 
-  $l_trusted_nets = nets2ddq($trusted_nets)
+  $l_trusted_nets = simplib::nets2ddq($trusted_nets)
 
   concat::fragment { "ntpd_${name}.allow":
     order   => 100,
