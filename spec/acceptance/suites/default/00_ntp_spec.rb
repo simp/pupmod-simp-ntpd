@@ -37,7 +37,7 @@ describe 'ntpd' do
       describe file('/etc/ntp/step-tickers') do
         step_tickers = <<-EOF.gsub(/^\s+/,'')
           # List of NTP servers used by the ntpdate service.
-          # This file is managed by Puppet (module: ntp)
+          # This file is managed by Puppet (module: ntpd)
           0.rhel.pool.ntp.org
           1.rhel.pool.ntp.org
           2.rhel.pool.ntp.org

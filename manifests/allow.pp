@@ -1,6 +1,4 @@
-# Allow access to this server from a particular address or netmask
-#
-# @param name [String]
+# @summary Allow access to this server from a particular address or netmask
 #
 # @param rules
 #   A standard ``ntpd.conf`` restrict rule (``notrust``, etc...)

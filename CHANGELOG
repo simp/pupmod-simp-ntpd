@@ -1,3 +1,10 @@
+* Mon Jun 24 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.4.0-0
+- Drop Puppet 4 support
+- Add ability for users to enable a default server capability directly from
+  Hiera
+- Fix minor typos in some templates
+- Add REFERENCE.md
+
 * Tue Mar 19 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 6.3.1-0
 - Use simplib::nets2ddq in lieu of deprecated Puppet 3 nets2ddq
 
