@@ -1,4 +1,4 @@
-# Set up ntpd in either standalone or server mode
+# @summary Set up ntpd in either standalone or server mode
 #
 # @see ntp.conf(5)
 #
@@ -62,6 +62,21 @@
 # @param manage_ntpdate
 #   Manage ntpdate settings
 #
+# @param trusted_nets
+#   Setting this to an Array of networks/hostnames that you trust for
+#   communication will enable a default ``ntpd::alow`` entry so that remote
+#   systems can query this system for time.
+#
+# @param default_restrict_rules
+#   Set to an Array of ``restrict`` rules of your choosing
+#
+#   * Has no effect if ``$trusted_nets`` is not set
+#
+# @param firewall
+#   Enable management of the firewall in relation to inbound communication
+#
+#   * Has no effect if ``$trusted_nets`` is not set
+#
 # @param ntpdate_servers
 #   NTP servers that are used in the ntpdate script at startup
 #
@@ -96,27 +111,30 @@
 # @author https://github.com/simp/pupmod-simp-ntpd/graphs/contributors
 #
 class ntpd (
-  String[1]               $ntpd_options,
-  Ntpd::Servers           $servers              = simplib::lookup('simp_options::ntpd::servers', { 'default_value' => {} }),
-  Integer[0]              $stratum              = 2,
-  Array[String[1]]        $logconfig            = ['=syncall','+clockall'],
-  Numeric                 $broadcastdelay       = 0.004,
-  Array[String[1]]        $default_options      = ['minpoll 4','maxpoll 4','iburst'],
-  Array[Ntpd::Restrict]   $default_restrict     = ['kod', 'nomodify', 'notrap', 'nopeer', 'noquery'],
-  Array[Ntpd::Restrict]   $default_restrict6    = $default_restrict,
-  Array[Simplib::IP::V4]  $admin_hosts          = ['127.0.0.1'],
-  Array[Simplib::IP::V6]  $admin_hosts6         = ['::1'],
-  Optional[Ntpd::Discard] $discard              = undef,
-  Boolean                 $disable_monitor      = true,
-  Boolean                 $manage_ntpdate       = true,
-  Ntpd::Servers           $ntpdate_servers      = $servers,
-  Boolean                 $ntpdate_sync_hwclock = true,
-  Integer[0]              $ntpdate_retry        = 2,
-  Optional[String[1]]     $ntpdate_options      = undef,
-  Boolean                 $auditd               = simplib::lookup('simp_options::auditd', { 'default_value' => false}),
-  String                  $package_ensure       = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
-  Optional[String[1]]     $extra_content        = undef,
-  Optional[String[1]]     $config_content       = undef
+  String[1]                       $ntpd_options,
+  Ntpd::Servers                   $servers                = simplib::lookup('simp_options::ntpd::servers', { 'default_value' => {} }),
+  Integer[0]                      $stratum                = 2,
+  Array[String[1]]                $logconfig              = ['=syncall','+clockall'],
+  Numeric                         $broadcastdelay         = 0.004,
+  Array[String[1]]                $default_options        = ['minpoll 4','maxpoll 4','iburst'],
+  Array[Ntpd::Restrict]           $default_restrict       = ['kod', 'nomodify', 'notrap', 'nopeer', 'noquery'],
+  Array[Ntpd::Restrict]           $default_restrict6      = $default_restrict,
+  Array[Simplib::IP::V4]          $admin_hosts            = ['127.0.0.1'],
+  Array[Simplib::IP::V6]          $admin_hosts6           = ['::1'],
+  Optional[Ntpd::Discard]         $discard                = undef,
+  Boolean                         $disable_monitor        = true,
+  Boolean                         $manage_ntpdate         = true,
+  Optional[Simplib::Netlist]      $trusted_nets           = undef,
+  Optional[Array[Ntpd::Restrict]] $default_restrict_rules = undef,
+  Boolean                         $firewall               = simplib::lookup('simp_options::firewall', { 'default_value' => false}),
+  Ntpd::Servers                   $ntpdate_servers        = $servers,
+  Boolean                         $ntpdate_sync_hwclock   = true,
+  Integer[0]                      $ntpdate_retry          = 2,
+  Optional[String[1]]             $ntpdate_options        = undef,
+  Boolean                         $auditd                 = simplib::lookup('simp_options::auditd', { 'default_value' => false}),
+  String                          $package_ensure         = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
+  Optional[String[1]]             $extra_content          = undef,
+  Optional[String[1]]             $config_content         = undef
 ) {
 
   if $manage_ntpdate {
@@ -203,8 +221,16 @@ class ntpd (
     require    => Package['ntp']
   }
 
+  if $trusted_nets {
+    ntpd::allow { "simp_default_${module_name}_allow":
+      rules        => $default_restrict_rules,
+      trusted_nets => $trusted_nets,
+      firewall     => $firewall
+    }
+  }
+
   if $auditd {
-    include '::auditd'
+    include 'auditd'
 
     $_audit_rule = @(EOF)
       -w /etc/ntp.conf -p wa -k CFG_ntp
@@ -219,5 +245,4 @@ class ntpd (
       ]
     }
   }
-
 }

@@ -4,7 +4,7 @@
   String $options,
 | -%>
 # Configuration for the ntpdate script that runs at boot
-# This file is managed by Puppet (module: ntp)
+# This file is managed by Puppet (module: ntpd)
 <% if $options { -%>
 # Options for ntpdate
 OPTIONS="<%= $options %>"

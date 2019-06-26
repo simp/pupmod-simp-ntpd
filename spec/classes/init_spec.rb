@@ -32,11 +32,12 @@ describe 'ntpd' do
         ) }
 
         it { is_expected.to_not contain_class('auditd')}
+        it { is_expected.to_not contain_ntpd__allow('simp_default_ntpd_allow') }
         if os =~ /7/
           it { is_expected.to create_file('/etc/sysconfig/ntpd').with_content(%r{OPTIONS="-g"}) }
           it { is_expected.to create_file('/etc/sysconfig/ntpdate').with_content(<<-EOF.gsub(/^\s+/,'')
             # Configuration for the ntpdate script that runs at boot
-            # This file is managed by Puppet (module: ntp)
+            # This file is managed by Puppet (module: ntpd)
             # Options for ntpdate
             OPTIONS="-p 2"
             # Number of retries before giving up
@@ -49,7 +50,7 @@ describe 'ntpd' do
           it { is_expected.to create_file('/etc/sysconfig/ntpd').with_content(%r{OPTIONS="-A -u ntp:ntp -p /var/run/ntpd.pid"}) }
           it { is_expected.to create_file('/etc/sysconfig/ntpdate').with_content(<<-EOF.gsub(/^\s+/,'')
             # Configuration for the ntpdate script that runs at boot
-            # This file is managed by Puppet (module: ntp)
+            # This file is managed by Puppet (module: ntpd)
             # Options for ntpdate
             OPTIONS="-U ntp -s -b"
             # Number of retries before giving up
@@ -115,7 +116,7 @@ describe 'ntpd' do
 
         it { is_expected.to create_file('/etc/ntp/step-tickers').with_content(<<-EOF.gsub(/^\s+/,'')
             # List of NTP servers used by the ntpdate service.
-            # This file is managed by Puppet (module: ntp)
+            # This file is managed by Puppet (module: ntpd)
             time.bar.baz
             time.other.net
           EOF
@@ -160,7 +161,7 @@ describe 'ntpd' do
 
         it { is_expected.to create_file('/etc/ntp/step-tickers').with_content(<<-EOF.gsub(/^\s+/,'')
             # List of NTP servers used by the ntpdate service.
-            # This file is managed by Puppet (module: ntp)
+            # This file is managed by Puppet (module: ntpd)
             time.bar.baz
             time.other.net
           EOF
@@ -236,6 +237,29 @@ describe 'ntpd' do
         let(:params){{ :logconfig => [] }}
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to_not create_concat__fragment('main_ntp_configuration').with_content(/logconfig/) }
+      end
+
+      context 'when allowing remote connections' do
+        context 'with just trusted_nets defined' do
+          let(:params){{
+            :trusted_nets => ['127.0.0.1', 'localhost']
+          }}
+
+          it { is_expected.to compile.with_all_deps }
+          it { is_expected.to create_ntpd__allow('simp_default_ntpd_allow').with_rules(nil) }
+          it { is_expected.to create_ntpd__allow('simp_default_ntpd_allow').with_trusted_nets(params[:trusted_nets]) }
+        end
+
+        context 'with rules defined' do
+          let(:params){{
+            :trusted_nets => ['127.0.0.1', 'localhost'],
+            :default_restrict_rules => ['kod']
+          }}
+
+          it { is_expected.to compile.with_all_deps }
+          it { is_expected.to create_ntpd__allow('simp_default_ntpd_allow').with_rules(params[:default_restrict_rules]) }
+          it { is_expected.to create_ntpd__allow('simp_default_ntpd_allow').with_trusted_nets(params[:trusted_nets]) }
+        end
       end
     end
   end

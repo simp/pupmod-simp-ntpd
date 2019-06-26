@@ -1,4 +1,6 @@
-# == Class: ntpd::ntpdate
+# @summary Manage the setup of ``ntpdate``
+#
+# @private
 #
 class ntpd::ntpdate {
   assert_private()
@@ -10,8 +12,8 @@ class ntpd::ntpdate {
 
   $ntpdate_vars = {
     'sync_hwclock' => $bool_to_yes_no[$::ntpd::ntpdate_sync_hwclock],
-    'retry'        => $::ntpd::ntpdate_retry,
-    'options'      => $::ntpd::ntpdate_options,
+    'retry'        => $ntpd::ntpdate_retry,
+    'options'      => $ntpd::ntpdate_options,
   }
   file { '/etc/sysconfig/ntpdate':
     ensure  => 'file',
