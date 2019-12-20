@@ -1,3 +1,7 @@
+* Thu Dec 19 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.5.1-0
+- Move simp-auditd and simp-iptables to optional dependencies
+- Updated REFERENCE.md
+
 * Fri Aug 02 2019 Robert Vincent <pillarsdotnet@gmail.com> - 6.5.1-0
 - Add support for puppetlabs-concat 6.x
 

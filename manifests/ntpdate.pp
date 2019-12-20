@@ -5,6 +5,8 @@
 class ntpd::ntpdate {
   assert_private()
 
+  simplib::module_metadata::assert($module_name)
+
   $bool_to_yes_no = {
     true  => 'yes',
     false => 'no'
