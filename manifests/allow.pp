@@ -27,6 +27,8 @@ define ntpd::allow (
   }
 
   if $firewall {
+    simplib::assert_optional_dependency($module_name, 'simp/iptables')
+
     include 'iptables'
 
     iptables::listen::udp { "allow_ntp_${name}":

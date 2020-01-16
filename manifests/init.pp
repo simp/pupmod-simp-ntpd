@@ -137,6 +137,8 @@ class ntpd (
   Optional[String[1]]             $config_content         = undef
 ) {
 
+  simplib::module_metadata::assert($module_name)
+
   if $manage_ntpdate {
     include 'ntpd::ntpdate'
   }
@@ -230,6 +232,8 @@ class ntpd (
   }
 
   if $auditd {
+    simplib::assert_optional_dependency($module_name, 'simp/auditd')
+
     include 'auditd'
 
     $_audit_rule = @(EOF)

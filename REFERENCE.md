@@ -12,6 +12,12 @@
 
 * [`ntpd::allow`](#ntpdallow): Allow access to this server from a particular address or netmask
 
+**Data types**
+
+* [`Ntpd::Discard`](#ntpddiscard): ntp ``discard`` options
+* [`Ntpd::Restrict`](#ntpdrestrict): ntp ``restrict`` options
+* [`Ntpd::Servers`](#ntpdservers): ntp servers can be an array of servers   or a hash where the keys are servers and the values are an array of options
+
 ## Classes
 
 ### ntpd
@@ -289,4 +295,30 @@ Data type: `Boolean`
 If enabled, allow connections from `trusted_nets`
 
 Default value: simplib::lookup('simp_options::firewall', { 'default_value' => false})
+
+## Data types
+
+### Ntpd::Discard
+
+ntp ``discard`` options
+
+Alias of `Struct[{
+  Optional[average] => Integer[0],
+  Optional[minimum] => Integer[0],
+  Optional[monitor] => Integer[1]
+}]`
+
+### Ntpd::Restrict
+
+ntp ``restrict`` options
+
+Alias of `Enum['flake', 'ignore', 'kod', 'limited', 'lowpriotrap', 'mssntp', 'nomodify', 'non-ntpport', 'nopeer', 'noquery', 'noserve', 'notrap', 'notrust', 'ntpport', 'version']`
+
+### Ntpd::Servers
+
+ntp servers can be an array of servers
+  or
+a hash where the keys are servers and the values are an array of options
+
+Alias of `Variant[Array[String], Hash[String, Array[String]]]`
 
