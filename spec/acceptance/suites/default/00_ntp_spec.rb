@@ -51,8 +51,6 @@ describe 'ntpd' do
       it 'should set /etc/sysconfig/ntpd appropriately' do
         on(host, 'cat /etc/sysconfig/ntpd') do
           case host[:platform]
-          when /el-6-x86_64/
-            content = %s{OPTIONS="-A -u ntp:ntp -p /var/run/ntpd.pid"}
           when /el-7-x86_64/
             content = %s{OPTIONS="-g"}
           end
