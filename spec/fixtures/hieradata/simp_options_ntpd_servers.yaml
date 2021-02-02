@@ -1,0 +1,5 @@
+---
+simp_options::ntpd::servers:
+  time.foo.bar: []
+  time.foo.baz:
+  - 'prefer'

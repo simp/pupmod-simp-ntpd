@@ -1,0 +1,5 @@
+---
+simp_options::ntp::servers:
+  time.bar.baz:
+  - 'prefer'
+  time.other.net: []

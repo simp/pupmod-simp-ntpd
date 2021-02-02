@@ -33,33 +33,18 @@ describe 'ntpd' do
 
         it { is_expected.to_not contain_class('auditd')}
         it { is_expected.to_not contain_ntpd__allow('simp_default_ntpd_allow') }
-        if os =~ /7/
-          it { is_expected.to create_file('/etc/sysconfig/ntpd').with_content(%r{OPTIONS="-g"}) }
-          it { is_expected.to create_file('/etc/sysconfig/ntpdate').with_content(<<-EOF.gsub(/^\s+/,'')
-            # Configuration for the ntpdate script that runs at boot
-            # This file is managed by Puppet (module: ntpd)
-            # Options for ntpdate
-            OPTIONS="-p 2"
-            # Number of retries before giving up
-            RETRY=2
-            # Set to 'yes' to sync hw clock after successful ntpdate
-            SYNC_HWCLOCK=yes
-            EOF
-          ) }
-        else
-          it { is_expected.to create_file('/etc/sysconfig/ntpd').with_content(%r{OPTIONS="-A -u ntp:ntp -p /var/run/ntpd.pid"}) }
-          it { is_expected.to create_file('/etc/sysconfig/ntpdate').with_content(<<-EOF.gsub(/^\s+/,'')
-            # Configuration for the ntpdate script that runs at boot
-            # This file is managed by Puppet (module: ntpd)
-            # Options for ntpdate
-            OPTIONS="-U ntp -s -b"
-            # Number of retries before giving up
-            RETRY=2
-            # Set to 'yes' to sync hw clock after successful ntpdate
-            SYNC_HWCLOCK=yes
-            EOF
-          ) }
-        end
+        it { is_expected.to create_file('/etc/sysconfig/ntpd').with_content(%r{OPTIONS="-g"}) }
+        it { is_expected.to create_file('/etc/sysconfig/ntpdate').with_content(<<-EOF.gsub(/^\s+/,'')
+          # Configuration for the ntpdate script that runs at boot
+          # This file is managed by Puppet (module: ntpd)
+          # Options for ntpdate
+          OPTIONS="-p 2"
+          # Number of retries before giving up
+          RETRY=2
+          # Set to 'yes' to sync hw clock after successful ntpdate
+          SYNC_HWCLOCK=yes
+          EOF
+        ) }
       end
 
       context 'virtual' do
@@ -260,6 +245,28 @@ describe 'ntpd' do
           it { is_expected.to create_ntpd__allow('simp_default_ntpd_allow').with_rules(params[:default_restrict_rules]) }
           it { is_expected.to create_ntpd__allow('simp_default_ntpd_allow').with_trusted_nets(params[:trusted_nets]) }
         end
+      end
+
+      context 'with simp_options::ntp::servers set' do
+        let(:hieradata) {'simp_options_ntp_servers' }
+
+        it { is_expected.to compile.with_all_deps }
+        it { is_expected.to create_concat__fragment('main_ntp_configuration').with_content(
+          /server time.bar.baz prefer/ ) }
+
+        it { is_expected.to create_concat__fragment('main_ntp_configuration').with_content(
+          /server time.other.net minpoll 4 maxpoll 4 iburst/ ) }
+      end
+
+      context 'with simp_options::ntpd::servers set' do
+        let(:hieradata) {'simp_options_ntpd_servers' }
+
+        it { is_expected.to compile.with_all_deps }
+        it { is_expected.to create_concat__fragment('main_ntp_configuration').with_content(
+          /server time.foo.bar minpoll 4 maxpoll 4 iburst/ ) }
+
+        it { is_expected.to create_concat__fragment('main_ntp_configuration').with_content(
+          /server time.foo.baz prefer/ ) }
       end
     end
   end

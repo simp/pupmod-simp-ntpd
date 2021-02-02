@@ -111,8 +111,8 @@
 # @author https://github.com/simp/pupmod-simp-ntpd/graphs/contributors
 #
 class ntpd (
-  String[1]                       $ntpd_options,
-  Ntpd::Servers                   $servers                = simplib::lookup('simp_options::ntpd::servers', { 'default_value' => {} }),
+  String[1]                       $ntpd_options           = '-g',
+  Ntpd::Servers                   $servers                = simplib::lookup('simp_options::ntp::servers', { 'default_value' => simplib::lookup('simp_options::ntpd::servers', { 'default_value' => {} }) }),
   Integer[0]                      $stratum                = 2,
   Array[String[1]]                $logconfig              = ['=syncall','+clockall'],
   Numeric                         $broadcastdelay         = 0.004,
@@ -130,7 +130,7 @@ class ntpd (
   Ntpd::Servers                   $ntpdate_servers        = $servers,
   Boolean                         $ntpdate_sync_hwclock   = true,
   Integer[0]                      $ntpdate_retry          = 2,
-  Optional[String[1]]             $ntpdate_options        = undef,
+  String[1]                       $ntpdate_options        = '-p 2',
   Boolean                         $auditd                 = simplib::lookup('simp_options::auditd', { 'default_value' => false}),
   String                          $package_ensure         = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
   Optional[String[1]]             $extra_content          = undef,
