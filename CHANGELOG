@@ -1,3 +1,6 @@
+* Wed Feb 24 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.5.2
+- Fix an issue where ntp::allow::rules was not being honored
+
 * Tue Feb 02 2021 Liz Nemsick <lnemsick.simp@gmail.com> - 6.5.2
 - Add simp_options::ntp::servers to the default lookup list for nptd::servers.
 
