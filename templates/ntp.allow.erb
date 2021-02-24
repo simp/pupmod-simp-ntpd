@@ -10,7 +10,7 @@ t_allow = []
     t_str += " mask #{t_mask}"
   end
 
-  unless @rules
+  if @rules
     t_str += " #{Array(@rules).join(' ')}"
   end
 
