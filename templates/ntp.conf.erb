@@ -28,14 +28,16 @@ restrict <%= admin_host %>
 restrict -6 <%= admin_host %>
 <%   end -%>
 
-<%   if @servers.empty? -%>
+<%   if @use_local_clock -%>
+<%     if @servers.empty? -%>
 server 127.127.1.0 # local clock
 fudge 127.127.1.0 stratum <%= @stratum %>
 
-<%   elsif !@virtual.eql?('vmware') -%>
+<%     elsif !@virtual.eql?('vmware') -%>
 server 127.127.1.0 # local clock
 fudge 127.127.1.0 stratum 10
 
+<%     end -%>
 <%   end -%>
 <%
     t_servers = []
