@@ -185,6 +185,53 @@ describe 'ntpd' do
         end
       end
 
+      context 'with servers array and without the local clock set' do
+        let(:params) do
+          {
+            'servers' => [
+              'time.bar.baz',
+              'time.other.net',
+            ],
+            'use_local_clock' => false
+          }
+        end
+
+        it { is_expected.to compile.with_all_deps }
+
+        it do
+          expect(subject).to create_concat__fragment('main_ntp_configuration')
+            .with_content(<<~CONTENT,
+            logconfig =syncall +clockall
+
+            tinker panic 0
+
+            restrict default kod nomodify notrap nopeer noquery
+            restrict -6 default kod nomodify notrap nopeer noquery
+
+            restrict 127.0.0.1
+            restrict -6 ::1
+
+            server time.bar.baz minpoll 4 maxpoll 4 iburst
+            server time.other.net minpoll 4 maxpoll 4 iburst
+            driftfile /var/lib/ntp/drift
+            broadcastdelay 0.004
+            disable monitor
+            CONTENT
+                         )
+        end
+
+        it do
+          expect(subject).to create_file('/etc/ntp/step-tickers')
+            .with_content(<<~CONTENT,
+            # List of NTP servers used by the ntpdate service.
+            # This file is managed by Puppet (module: ntpd)
+            time.bar.baz
+            time.other.net
+            CONTENT
+                         )
+        end
+      end
+
       context 'with extra content' do
         let(:params) do
           {

@@ -52,6 +52,7 @@ The following parameters are available in the `ntpd` class:
 * [`ntpdate_sync_hwclock`](#ntpdate_sync_hwclock)
 * [`ntpdate_retry`](#ntpdate_retry)
 * [`ntpdate_options`](#ntpdate_options)
+* [`use_local_clock`](#use_local_clock)
 * [`auditd`](#auditd)
 * [`package_ensure`](#package_ensure)
 * [`extra_content`](#extra_content)
@@ -244,6 +245,14 @@ Data type: `String[1]`
 Options for ntpdate. Set in `/etc/sysconfig/ntpdate`
 
 Default value: `'-p 2'`
+
+##### <a name="use_local_clock"></a>`use_local_clock`
+
+Data type: `Boolean`
+
+Set the local clock in the server and fudge lists
+
+Default value: `true`
 
 ##### <a name="auditd"></a>`auditd`
 

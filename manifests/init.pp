@@ -90,6 +90,9 @@
 # @param ntpdate_options
 #   Options for ntpdate. Set in `/etc/sysconfig/ntpdate`
 #
+# @param use_local_clock
+#   Set the server and fudge list to the local clock in ntp.conf
+#
 # @param auditd
 #   Enable auditd monitoring of the ntp configuration files
 #
@@ -131,6 +134,7 @@ class ntpd (
   Boolean                         $ntpdate_sync_hwclock   = true,
   Integer[0]                      $ntpdate_retry          = 2,
   String[1]                       $ntpdate_options        = '-p 2',
+  Boolean                         $use_local_clock        = true,
   Boolean                         $auditd                 = simplib::lookup('simp_options::auditd', { 'default_value' => false}),
   String                          $package_ensure         = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
   Optional[String[1]]             $extra_content          = undef,
