@@ -1,6 +1,6 @@
 {
   "name": "simp-ntpd",
-  "version": "6.7.0",
+  "version": "6.8.0",
   "author": "SIMP Team",
   "summary": "manages NTP server and client",
   "license": "Apache-2.0",
@@ -19,7 +19,7 @@
     },
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 6.6.0 < 8.0.0"
+      "version_requirement": ">= 8.0.0 < 9.0.0"
     },
     {
       "name": "simp/simplib",
@@ -55,6 +55,12 @@
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
         "7"
+      ]
+    },
+    {
+      "operatingsystem": "Rocky",
+      "operatingsystemrelease": [
+        "8"
       ]
     }
   ],
