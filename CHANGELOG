@@ -1,3 +1,6 @@
+* Mon Jul 24 2023 Chris Tessmer <chris.tessmer@onyxpoint.com> - 6.8.0
+- Add RockyLinux 8 support
+
 * Mon Nov 29 2021 Kendall Moore <kendall@sicura.us> - 6.7.0
 - Allow for disabling of local time source for server and fudge lists
 
