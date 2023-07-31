@@ -7,17 +7,17 @@
 ### Classes
 
 * [`ntpd`](#ntpd): Set up ntpd in either standalone or server mode
-* [`ntpd::ntpdate`](#ntpdntpdate): Manage the setup of ``ntpdate``
+* [`ntpd::ntpdate`](#ntpd--ntpdate): Manage the setup of ``ntpdate``
 
 ### Defined types
 
-* [`ntpd::allow`](#ntpdallow): Allow access to this server from a particular address or netmask
+* [`ntpd::allow`](#ntpd--allow): Allow access to this server from a particular address or netmask
 
 ### Data types
 
-* [`Ntpd::Discard`](#ntpddiscard): ntp ``discard`` options
-* [`Ntpd::Restrict`](#ntpdrestrict): ntp ``restrict`` options
-* [`Ntpd::Servers`](#ntpdservers): ntp servers can be an array of servers   or a hash where the keys are servers and the values are an array of options
+* [`Ntpd::Discard`](#Ntpd--Discard): ntp ``discard`` options
+* [`Ntpd::Restrict`](#Ntpd--Restrict): ntp ``restrict`` options
+* [`Ntpd::Servers`](#Ntpd--Servers): ntp servers can be an array of servers   or a hash where the keys are servers and the values are an array of options
 
 ## Classes
 
@@ -32,33 +32,33 @@ Set up ntpd in either standalone or server mode
 
 The following parameters are available in the `ntpd` class:
 
-* [`ntpd_options`](#ntpd_options)
-* [`servers`](#servers)
-* [`stratum`](#stratum)
-* [`logconfig`](#logconfig)
-* [`broadcastdelay`](#broadcastdelay)
-* [`default_options`](#default_options)
-* [`default_restrict`](#default_restrict)
-* [`default_restrict6`](#default_restrict6)
-* [`admin_hosts`](#admin_hosts)
-* [`admin_hosts6`](#admin_hosts6)
-* [`discard`](#discard)
-* [`disable_monitor`](#disable_monitor)
-* [`manage_ntpdate`](#manage_ntpdate)
-* [`trusted_nets`](#trusted_nets)
-* [`default_restrict_rules`](#default_restrict_rules)
-* [`firewall`](#firewall)
-* [`ntpdate_servers`](#ntpdate_servers)
-* [`ntpdate_sync_hwclock`](#ntpdate_sync_hwclock)
-* [`ntpdate_retry`](#ntpdate_retry)
-* [`ntpdate_options`](#ntpdate_options)
-* [`use_local_clock`](#use_local_clock)
-* [`auditd`](#auditd)
-* [`package_ensure`](#package_ensure)
-* [`extra_content`](#extra_content)
-* [`config_content`](#config_content)
+* [`ntpd_options`](#-ntpd--ntpd_options)
+* [`servers`](#-ntpd--servers)
+* [`stratum`](#-ntpd--stratum)
+* [`logconfig`](#-ntpd--logconfig)
+* [`broadcastdelay`](#-ntpd--broadcastdelay)
+* [`default_options`](#-ntpd--default_options)
+* [`default_restrict`](#-ntpd--default_restrict)
+* [`default_restrict6`](#-ntpd--default_restrict6)
+* [`admin_hosts`](#-ntpd--admin_hosts)
+* [`admin_hosts6`](#-ntpd--admin_hosts6)
+* [`discard`](#-ntpd--discard)
+* [`disable_monitor`](#-ntpd--disable_monitor)
+* [`manage_ntpdate`](#-ntpd--manage_ntpdate)
+* [`trusted_nets`](#-ntpd--trusted_nets)
+* [`default_restrict_rules`](#-ntpd--default_restrict_rules)
+* [`firewall`](#-ntpd--firewall)
+* [`ntpdate_servers`](#-ntpd--ntpdate_servers)
+* [`ntpdate_sync_hwclock`](#-ntpd--ntpdate_sync_hwclock)
+* [`ntpdate_retry`](#-ntpd--ntpdate_retry)
+* [`ntpdate_options`](#-ntpd--ntpdate_options)
+* [`use_local_clock`](#-ntpd--use_local_clock)
+* [`auditd`](#-ntpd--auditd)
+* [`package_ensure`](#-ntpd--package_ensure)
+* [`extra_content`](#-ntpd--extra_content)
+* [`config_content`](#-ntpd--config_content)
 
-##### <a name="ntpd_options"></a>`ntpd_options`
+##### <a name="-ntpd--ntpd_options"></a>`ntpd_options`
 
 Data type: `String[1]`
 
@@ -66,7 +66,7 @@ Options for the ntp daemon, put into `/etc/sysconfig/ntpd`
 
 Default value: `'-g'`
 
-##### <a name="servers"></a>`servers`
+##### <a name="-ntpd--servers"></a>`servers`
 
 Data type: `Ntpd::Servers`
 
@@ -85,7 +85,7 @@ for the NTP servers that this system should synchronize with
 
 Default value: `simplib::lookup('simp_options::ntp::servers', { 'default_value' => simplib::lookup('simp_options::ntpd::servers', { 'default_value' => {} }) })`
 
-##### <a name="stratum"></a>`stratum`
+##### <a name="-ntpd--stratum"></a>`stratum`
 
 Data type: `Integer[0]`
 
@@ -96,7 +96,7 @@ The stratum for this system
 
 Default value: `2`
 
-##### <a name="logconfig"></a>`logconfig`
+##### <a name="-ntpd--logconfig"></a>`logconfig`
 
 Data type: `Array[String[1]]`
 
@@ -104,7 +104,7 @@ A list of options for refining the system log output
 
 Default value: `['=syncall','+clockall']`
 
-##### <a name="broadcastdelay"></a>`broadcastdelay`
+##### <a name="-ntpd--broadcastdelay"></a>`broadcastdelay`
 
 Data type: `Numeric`
 
@@ -112,7 +112,7 @@ Default calibration delay
 
 Default value: `0.004`
 
-##### <a name="default_options"></a>`default_options`
+##### <a name="-ntpd--default_options"></a>`default_options`
 
 Data type: `Array[String[1]]`
 
@@ -122,7 +122,7 @@ The default options that will be added to all servers
 
 Default value: `['minpoll 4','maxpoll 4','iburst']`
 
-##### <a name="default_restrict"></a>`default_restrict`
+##### <a name="-ntpd--default_restrict"></a>`default_restrict`
 
 Data type: `Array[Ntpd::Restrict]`
 
@@ -130,7 +130,7 @@ The default IPv4 ``restrict`` options
 
 Default value: `['kod', 'nomodify', 'notrap', 'nopeer', 'noquery']`
 
-##### <a name="default_restrict6"></a>`default_restrict6`
+##### <a name="-ntpd--default_restrict6"></a>`default_restrict6`
 
 Data type: `Array[Ntpd::Restrict]`
 
@@ -138,7 +138,7 @@ The default IPv6 ``restrict`` options
 
 Default value: `$default_restrict`
 
-##### <a name="admin_hosts"></a>`admin_hosts`
+##### <a name="-ntpd--admin_hosts"></a>`admin_hosts`
 
 Data type: `Array[Simplib::IP::V4]`
 
@@ -146,7 +146,7 @@ Hosts that are allowed unrestricted access via IPv4
 
 Default value: `['127.0.0.1']`
 
-##### <a name="admin_hosts6"></a>`admin_hosts6`
+##### <a name="-ntpd--admin_hosts6"></a>`admin_hosts6`
 
 Data type: `Array[Simplib::IP::V6]`
 
@@ -154,16 +154,16 @@ Hosts that are allowed unrestricted access via IPv6
 
 Default value: `['::1']`
 
-##### <a name="discard"></a>`discard`
+##### <a name="-ntpd--discard"></a>`discard`
 
 Data type: `Optional[Ntpd::Discard]`
 
 An optional has that can be used to set the average,minimum and
 monitor options for ``discard``
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="disable_monitor"></a>`disable_monitor`
+##### <a name="-ntpd--disable_monitor"></a>`disable_monitor`
 
 Data type: `Boolean`
 
@@ -173,17 +173,17 @@ Disable the monitoring facility to prevent amplification attacks using
 
 * See CVE-2013-5211 for details
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="manage_ntpdate"></a>`manage_ntpdate`
+##### <a name="-ntpd--manage_ntpdate"></a>`manage_ntpdate`
 
 Data type: `Boolean`
 
 Manage ntpdate settings
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="trusted_nets"></a>`trusted_nets`
+##### <a name="-ntpd--trusted_nets"></a>`trusted_nets`
 
 Data type: `Optional[Simplib::Netlist]`
 
@@ -191,9 +191,9 @@ Setting this to an Array of networks/hostnames that you trust for
 communication will enable a default ``ntpd::alow`` entry so that remote
 systems can query this system for time.
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="default_restrict_rules"></a>`default_restrict_rules`
+##### <a name="-ntpd--default_restrict_rules"></a>`default_restrict_rules`
 
 Data type: `Optional[Array[Ntpd::Restrict]]`
 
@@ -201,9 +201,9 @@ Set to an Array of ``restrict`` rules of your choosing
 
 * Has no effect if ``$trusted_nets`` is not set
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="firewall"></a>`firewall`
+##### <a name="-ntpd--firewall"></a>`firewall`
 
 Data type: `Boolean`
 
@@ -213,7 +213,7 @@ Enable management of the firewall in relation to inbound communication
 
 Default value: `simplib::lookup('simp_options::firewall', { 'default_value' => false})`
 
-##### <a name="ntpdate_servers"></a>`ntpdate_servers`
+##### <a name="-ntpd--ntpdate_servers"></a>`ntpdate_servers`
 
 Data type: `Ntpd::Servers`
 
@@ -221,16 +221,16 @@ NTP servers that are used in the ntpdate script at startup
 
 Default value: `$servers`
 
-##### <a name="ntpdate_sync_hwclock"></a>`ntpdate_sync_hwclock`
+##### <a name="-ntpd--ntpdate_sync_hwclock"></a>`ntpdate_sync_hwclock`
 
 Data type: `Boolean`
 
 Set to `true` to sync hw clock after successful ntpdate. Set in
 `/etc/sysconfig/ntpdate`
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="ntpdate_retry"></a>`ntpdate_retry`
+##### <a name="-ntpd--ntpdate_retry"></a>`ntpdate_retry`
 
 Data type: `Integer[0]`
 
@@ -238,7 +238,7 @@ Number of retries before giving up. Set in `/etc/sysconfig/ntpdate`
 
 Default value: `2`
 
-##### <a name="ntpdate_options"></a>`ntpdate_options`
+##### <a name="-ntpd--ntpdate_options"></a>`ntpdate_options`
 
 Data type: `String[1]`
 
@@ -246,15 +246,15 @@ Options for ntpdate. Set in `/etc/sysconfig/ntpdate`
 
 Default value: `'-p 2'`
 
-##### <a name="use_local_clock"></a>`use_local_clock`
+##### <a name="-ntpd--use_local_clock"></a>`use_local_clock`
 
 Data type: `Boolean`
 
-Set the local clock in the server and fudge lists
+Set the server and fudge list to the local clock in ntp.conf
 
 Default value: `true`
 
-##### <a name="auditd"></a>`auditd`
+##### <a name="-ntpd--auditd"></a>`auditd`
 
 Data type: `Boolean`
 
@@ -265,7 +265,7 @@ Enable auditd monitoring of the ntp configuration files
 
 Default value: `simplib::lookup('simp_options::auditd', { 'default_value' => false})`
 
-##### <a name="package_ensure"></a>`package_ensure`
+##### <a name="-ntpd--package_ensure"></a>`package_ensure`
 
 Data type: `String`
 
@@ -273,15 +273,15 @@ Data type: `String`
 
 Default value: `simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' })`
 
-##### <a name="extra_content"></a>`extra_content`
+##### <a name="-ntpd--extra_content"></a>`extra_content`
 
 Data type: `Optional[String[1]]`
 
 An unvalidated String that will be appended to the configuration file
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="config_content"></a>`config_content`
+##### <a name="-ntpd--config_content"></a>`config_content`
 
 Data type: `Optional[String[1]]`
 
@@ -291,15 +291,15 @@ OPTIONS WILL BE IGNORED.
 * NOTE: Calls to ``ntpd::allow`` will still add ``restrict`` lines to the
   configuration.
 
-Default value: ``undef``
+Default value: `undef`
 
-### <a name="ntpdntpdate"></a>`ntpd::ntpdate`
+### <a name="ntpd--ntpdate"></a>`ntpd::ntpdate`
 
 Manage the setup of ``ntpdate``
 
 ## Defined types
 
-### <a name="ntpdallow"></a>`ntpd::allow`
+### <a name="ntpd--allow"></a>`ntpd::allow`
 
 Allow access to this server from a particular address or netmask
 
@@ -307,21 +307,25 @@ Allow access to this server from a particular address or netmask
 
 The following parameters are available in the `ntpd::allow` defined type:
 
-* [`rules`](#rules)
-* [`trusted_nets`](#trusted_nets)
-* [`firewall`](#firewall)
+* [`rules`](#-ntpd--allow--rules)
+* [`trusted_nets`](#-ntpd--allow--trusted_nets)
+* [`firewall`](#-ntpd--allow--firewall)
 
-##### <a name="rules"></a>`rules`
+##### <a name="-ntpd--allow--rules"></a>`rules`
 
-Data type: `Optional[Variant[
+Data type:
+
+```puppet
+Optional[Variant[
     String[1],Array[Ntpd::Restrict]
-  ]]`
+  ]]
+```
 
 A standard ``ntpd.conf`` restrict rule (``notrust``, etc...)
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="trusted_nets"></a>`trusted_nets`
+##### <a name="-ntpd--allow--trusted_nets"></a>`trusted_nets`
 
 Data type: `Simplib::Netlist`
 
@@ -329,7 +333,7 @@ Networks and Hosts to allow
 
 Default value: `simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1', '::1'] })`
 
-##### <a name="firewall"></a>`firewall`
+##### <a name="-ntpd--allow--firewall"></a>`firewall`
 
 Data type: `Boolean`
 
@@ -339,7 +343,7 @@ Default value: `simplib::lookup('simp_options::firewall', { 'default_value' => f
 
 ## Data types
 
-### <a name="ntpddiscard"></a>`Ntpd::Discard`
+### <a name="Ntpd--Discard"></a>`Ntpd::Discard`
 
 ntp ``discard`` options
 
@@ -353,25 +357,17 @@ Struct[{
 }]
 ```
 
-### <a name="ntpdrestrict"></a>`Ntpd::Restrict`
+### <a name="Ntpd--Restrict"></a>`Ntpd::Restrict`
 
 ntp ``restrict`` options
 
-Alias of
+Alias of `Enum['flake', 'ignore', 'kod', 'limited', 'lowpriotrap', 'mssntp', 'nomodify', 'non-ntpport', 'nopeer', 'noquery', 'noserve', 'notrap', 'notrust', 'ntpport', 'version']`
 
-```puppet
-Enum['flake', 'ignore', 'kod', 'limited', 'lowpriotrap', 'mssntp', 'nomodify', 'non-ntpport', 'nopeer', 'noquery', 'noserve', 'notrap', 'notrust', 'ntpport', 'version']
-```
-
-### <a name="ntpdservers"></a>`Ntpd::Servers`
+### <a name="Ntpd--Servers"></a>`Ntpd::Servers`
 
 ntp servers can be an array of servers
   or
 a hash where the keys are servers and the values are an array of options
 
-Alias of
-
-```puppet
-Variant[Array[String], Hash[String, Array[String]]]
-```
+Alias of `Variant[Array[String], Hash[String, Array[String]]]`
 
