@@ -1,4 +1,11 @@
 # frozen_string_literal: true
+#
+# ------------------------------------------------------------------------------
+#         NOTICE: **This file is maintained with puppetsync**
+#
+# This file is automatically updated as part of a puppet module baseline.
+# The next baseline sync will overwrite any local changes made to this file.
+# ------------------------------------------------------------------------------
 
 require 'puppetlabs_spec_helper/module_spec_helper'
 require 'rspec-puppet'
@@ -20,10 +27,6 @@ default_hiera_config = <<~HIERA_CONFIG
 ---
 version: 5
 hierarchy:
-  - name: SIMP Compliance Engine
-    lookup_key: compliance_markup::enforcement
-    options:
-      enabled_sce_versions: [2]
   - name: Custom Test Hiera
     path: "%{custom_hiera}.yaml"
   - name: "%{module_name}"
