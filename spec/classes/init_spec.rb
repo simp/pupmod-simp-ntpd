@@ -59,7 +59,7 @@ describe 'ntpd' do
 
       context 'when virtual' do
         let(:facts) do
-          os_facts.merge({ :virtual => 'kvm' })
+          os_facts.merge({ virtual: 'kvm' })
         end
 
         it { is_expected.to compile.with_all_deps }
@@ -67,7 +67,7 @@ describe 'ntpd' do
       end
 
       context 'with auditd => true' do
-        let(:params) { { :auditd => true } }
+        let(:params) { { auditd: true } }
 
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to create_class('auditd') }
@@ -294,7 +294,7 @@ describe 'ntpd' do
 
       context 'with servers and vmware' do
         let(:facts) do
-          os_facts.merge({ :virtual => 'vmware' })
+          os_facts.merge({ virtual: 'vmware' })
         end
 
         let(:params) do
@@ -312,7 +312,7 @@ describe 'ntpd' do
       end
 
       context 'with logconfig empty' do
-        let(:params) { { :logconfig => [] } }
+        let(:params) { { logconfig: [] } }
 
         it { is_expected.to compile.with_all_deps }
         it { is_expected.not_to create_concat__fragment('main_ntp_configuration').with_content(%r{logconfig}) }
@@ -322,7 +322,7 @@ describe 'ntpd' do
         context 'with just trusted_nets defined' do
           let(:params) do
             {
-              :trusted_nets => ['127.0.0.1', 'localhost']
+              trusted_nets: ['127.0.0.1', 'localhost']
             }
           end
 
@@ -334,8 +334,8 @@ describe 'ntpd' do
         context 'with rules defined' do
           let(:params) do
             {
-              :trusted_nets => ['127.0.0.1', 'localhost'],
-              :default_restrict_rules => ['kod']
+              trusted_nets: ['127.0.0.1', 'localhost'],
+              default_restrict_rules: ['kod']
             }
           end
 

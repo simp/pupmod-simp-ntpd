@@ -24,11 +24,11 @@ describe 'ntpd' do
     context "on #{host}" do
       it 'works with default values' do
         set_hieradata_on(host, hiera)
-        apply_manifest_on(host, manifest, :catch_failures => true)
+        apply_manifest_on(host, manifest, catch_failures: true)
       end
 
       it 'is idempotent' do
-        apply_manifest_on(host, manifest, :catch_changes => true)
+        apply_manifest_on(host, manifest, catch_changes: true)
       end
 
       describe file('/etc/ntp.conf') do
