@@ -34,7 +34,7 @@ describe 'compliance_markup', type: :class do
           let(:facts) do
             os_facts.merge(
               {
-                :target_compliance_profile => target_profile
+                target_compliance_profile: target_profile
               },
             )
           end

@@ -27,7 +27,7 @@ describe 'ntpd::allow' do
       context 'with rules set' do
         let(:params) do
           {
-            :rules => ['flake', 'nomodify']
+            rules: ['flake', 'nomodify']
           }
         end
 
@@ -44,7 +44,7 @@ describe 'ntpd::allow' do
       end
 
       context 'with firewall => true' do
-        let(:params) { { :firewall => true } }
+        let(:params) { { firewall: true } }
 
         it { is_expected.to contain_class('iptables') }
         it { is_expected.to contain_iptables__listen__udp('allow_ntp_test') }
