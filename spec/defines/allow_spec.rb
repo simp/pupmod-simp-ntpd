@@ -11,14 +11,14 @@ describe 'ntpd::allow' do
       context 'with default parameters' do
         it { is_expected.to compile.with_all_deps }
 
-        it do
-          expect(subject).to create_concat__fragment("ntpd_#{title}.allow")
+        it {
+          is_expected.to create_concat__fragment("ntpd_#{title}.allow")
             .with_content(<<~CONTENT,
             restrict 1.2.3.0 mask 255.255.255.0
             restrict 3.4.5.6
             CONTENT
                          )
-        end
+        }
 
         it { is_expected.not_to contain_class('iptables') }
         it { is_expected.not_to contain_iptables__listen__udp('allow_ntp_test') }
@@ -33,14 +33,14 @@ describe 'ntpd::allow' do
 
         it { is_expected.not_to contain_class('iptables') }
 
-        it do
-          expect(subject).to create_concat__fragment("ntpd_#{title}.allow")
+        it {
+          is_expected.to create_concat__fragment("ntpd_#{title}.allow")
             .with_content(<<~CONTENT,
             restrict 1.2.3.0 mask 255.255.255.0 flake nomodify
             restrict 3.4.5.6 flake nomodify
             CONTENT
                          )
-        end
+        }
       end
 
       context 'with firewall => true' do

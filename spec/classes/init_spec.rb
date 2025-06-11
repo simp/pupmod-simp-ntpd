@@ -13,8 +13,8 @@ describe 'ntpd' do
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to create_concat('/etc/ntp.conf') }
 
-        it do
-          expect(subject).to create_concat__fragment('main_ntp_configuration')
+        it {
+          is_expected.to create_concat__fragment('main_ntp_configuration')
             .with_content(<<~MAIN_NTP_CONFIG,
             logconfig =syncall +clockall
 
@@ -35,14 +35,14 @@ describe 'ntpd' do
             disable monitor
             MAIN_NTP_CONFIG
                          )
-        end
+        }
 
         it { is_expected.not_to contain_class('auditd') }
         it { is_expected.not_to contain_ntpd__allow('simp_default_ntpd_allow') }
         it { is_expected.to create_file('/etc/sysconfig/ntpd').with_content(%r{OPTIONS="-g"}) }
 
-        it do
-          expect(subject).to create_file('/etc/sysconfig/ntpdate')
+        it {
+          is_expected.to create_file('/etc/sysconfig/ntpdate')
             .with_content(<<~CONTENT,
             # Configuration for the ntpdate script that runs at boot
             # This file is managed by Puppet (module: ntpd)
@@ -54,7 +54,7 @@ describe 'ntpd' do
             SYNC_HWCLOCK=yes
             CONTENT
                          )
-        end
+        }
       end
 
       context 'when virtual' do
@@ -72,14 +72,14 @@ describe 'ntpd' do
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to create_class('auditd') }
 
-        it do
-          expect(subject).to create_auditd__rule('ntp')
+        it {
+          is_expected.to create_auditd__rule('ntp')
             .with_content(<<~CONTENT,
               -w /etc/ntp.conf -p wa -k CFG_ntp
               -w /etc/ntp/keys -p wa -k CFG_ntp
             CONTENT
                          )
-        end
+        }
       end
 
       context 'with servers array' do
@@ -94,8 +94,8 @@ describe 'ntpd' do
 
         it { is_expected.to compile.with_all_deps }
 
-        it do
-          expect(subject).to create_concat__fragment('main_ntp_configuration')
+        it {
+          is_expected.to create_concat__fragment('main_ntp_configuration')
             .with_content(<<~CONTENT,
             logconfig =syncall +clockall
 
@@ -117,10 +117,10 @@ describe 'ntpd' do
             disable monitor
             CONTENT
                          )
-        end
+        }
 
-        it do
-          expect(subject).to create_file('/etc/ntp/step-tickers')
+        it {
+          is_expected.to create_file('/etc/ntp/step-tickers')
             .with_content(<<~CONTENT,
             # List of NTP servers used by the ntpdate service.
             # This file is managed by Puppet (module: ntpd)
@@ -128,7 +128,7 @@ describe 'ntpd' do
             time.other.net
             CONTENT
                          )
-        end
+        }
       end
 
       context 'with servers hash' do
@@ -147,8 +147,8 @@ describe 'ntpd' do
 
         it { is_expected.to compile.with_all_deps }
 
-        it do
-          expect(subject).to create_concat__fragment('main_ntp_configuration')
+        it {
+          is_expected.to create_concat__fragment('main_ntp_configuration')
             .with_content(<<~CONTENT,
             logconfig =syncall +clockall
 
@@ -171,10 +171,10 @@ describe 'ntpd' do
             disable monitor
             CONTENT
                          )
-        end
+        }
 
-        it do
-          expect(subject).to create_file('/etc/ntp/step-tickers')
+        it {
+          is_expected.to create_file('/etc/ntp/step-tickers')
             .with_content(<<~CONTENT,
             # List of NTP servers used by the ntpdate service.
             # This file is managed by Puppet (module: ntpd)
@@ -182,7 +182,7 @@ describe 'ntpd' do
             time.other.net
             CONTENT
                          )
-        end
+        }
       end
 
       context 'with servers array and without the local clock set' do
@@ -198,8 +198,8 @@ describe 'ntpd' do
 
         it { is_expected.to compile.with_all_deps }
 
-        it do
-          expect(subject).to create_concat__fragment('main_ntp_configuration')
+        it {
+          is_expected.to create_concat__fragment('main_ntp_configuration')
             .with_content(<<~CONTENT,
             logconfig =syncall +clockall
 
@@ -218,10 +218,10 @@ describe 'ntpd' do
             disable monitor
             CONTENT
                          )
-        end
+        }
 
-        it do
-          expect(subject).to create_file('/etc/ntp/step-tickers')
+        it {
+          is_expected.to create_file('/etc/ntp/step-tickers')
             .with_content(<<~CONTENT,
             # List of NTP servers used by the ntpdate service.
             # This file is managed by Puppet (module: ntpd)
@@ -229,7 +229,7 @@ describe 'ntpd' do
             time.other.net
             CONTENT
                          )
-        end
+        }
       end
 
       context 'with extra content' do
@@ -241,8 +241,8 @@ describe 'ntpd' do
 
         it { is_expected.to compile.with_all_deps }
 
-        it do
-          expect(subject).to create_concat__fragment('main_ntp_configuration')
+        it {
+          is_expected.to create_concat__fragment('main_ntp_configuration')
             .with_content(<<~CONTENT,
             logconfig =syncall +clockall
 
@@ -268,7 +268,7 @@ describe 'ntpd' do
             # End raw user content
             CONTENT
                          )
-        end
+        }
       end
 
       context 'with fully user-defined content' do
@@ -281,15 +281,15 @@ describe 'ntpd' do
 
         it { is_expected.to compile.with_all_deps }
 
-        it do
-          expect(subject).to create_concat__fragment('main_ntp_configuration')
+        it {
+          is_expected.to create_concat__fragment('main_ntp_configuration')
             .with_content(<<~CONTENT,
             # Begin user-defined configuration
             This is all you get
             # End user-defined configuration
             CONTENT
                          )
-        end
+        }
       end
 
       context 'with servers and vmware' do
@@ -351,13 +351,13 @@ describe 'ntpd' do
         it { is_expected.to compile.with_all_deps }
 
         it {
-          expect(subject).to create_concat__fragment('main_ntp_configuration').with_content(
+          is_expected.to create_concat__fragment('main_ntp_configuration').with_content(
             %r{server time.bar.baz prefer},
           )
         }
 
         it {
-          expect(subject).to create_concat__fragment('main_ntp_configuration').with_content(
+          is_expected.to create_concat__fragment('main_ntp_configuration').with_content(
             %r{server time.other.net minpoll 4 maxpoll 4 iburst},
           )
         }
@@ -369,13 +369,13 @@ describe 'ntpd' do
         it { is_expected.to compile.with_all_deps }
 
         it {
-          expect(subject).to create_concat__fragment('main_ntp_configuration').with_content(
+          is_expected.to create_concat__fragment('main_ntp_configuration').with_content(
             %r{server time.foo.bar minpoll 4 maxpoll 4 iburst},
           )
         }
 
         it {
-          expect(subject).to create_concat__fragment('main_ntp_configuration').with_content(
+          is_expected.to create_concat__fragment('main_ntp_configuration').with_content(
             %r{server time.foo.baz prefer},
           )
         }
