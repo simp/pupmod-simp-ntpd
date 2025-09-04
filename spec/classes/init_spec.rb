@@ -48,7 +48,7 @@ describe 'ntpd' do
               # Options for ntpdate
               OPTIONS="-p 2"
               # Number of retries before giving up
-             RETRY=2
+              RETRY=2
               # Set to 'yes' to sync hw clock after successful ntpdate
               SYNC_HWCLOCK=yes
             CONTENT
