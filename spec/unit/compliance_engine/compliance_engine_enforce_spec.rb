@@ -24,7 +24,7 @@ describe 'compliance_markup', type: :class do
 
   allowed_failures = {
     'documented_missing_parameters' => [] + expected_classes.map { |c| Regexp.new("^(?!#{c}(::.*)?)") },
-    'documented_missing_resources' => [] + expected_classes.map { |c| Regexp.new("^(?!#{c}(::.*)?)") }
+    'documented_missing_resources' => [] + expected_classes.map { |c| Regexp.new("^(?!#{c}(::.*)?)") },
   }
 
   on_supported_os.each do |os, os_facts|
@@ -32,11 +32,7 @@ describe 'compliance_markup', type: :class do
       compliance_profiles.each do |target_profile|
         context "with compliance profile '#{target_profile}'" do
           let(:facts) do
-            os_facts.merge(
-              {
-                target_compliance_profile: target_profile
-              },
-            )
+            os_facts.merge(target_compliance_profile: target_profile)
           end
           let(:compliance_report) do
             JSON.parse(

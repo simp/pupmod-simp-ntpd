@@ -13,11 +13,10 @@ describe 'ntpd::allow' do
 
         it {
           is_expected.to create_concat__fragment("ntpd_#{title}.allow")
-            .with_content(<<~CONTENT,
-            restrict 1.2.3.0 mask 255.255.255.0
-            restrict 3.4.5.6
+            .with_content(<<~CONTENT)
+              restrict 1.2.3.0 mask 255.255.255.0
+              restrict 3.4.5.6
             CONTENT
-                         )
         }
 
         it { is_expected.not_to contain_class('iptables') }
@@ -27,7 +26,7 @@ describe 'ntpd::allow' do
       context 'with rules set' do
         let(:params) do
           {
-            rules: ['flake', 'nomodify']
+            rules: ['flake', 'nomodify'],
           }
         end
 
@@ -35,11 +34,10 @@ describe 'ntpd::allow' do
 
         it {
           is_expected.to create_concat__fragment("ntpd_#{title}.allow")
-            .with_content(<<~CONTENT,
-            restrict 1.2.3.0 mask 255.255.255.0 flake nomodify
-            restrict 3.4.5.6 flake nomodify
+            .with_content(<<~CONTENT)
+              restrict 1.2.3.0 mask 255.255.255.0 flake nomodify
+              restrict 3.4.5.6 flake nomodify
             CONTENT
-                         )
         }
       end
 

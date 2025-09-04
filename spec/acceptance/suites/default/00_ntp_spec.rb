@@ -13,7 +13,7 @@ describe 'ntpd' do
         '1.rhel.pool.ntp.org',
         '2.rhel.pool.ntp.org',
         '3.rhel.pool.ntp.org',
-      ]
+      ],
     }
   end
   let(:manifest) do

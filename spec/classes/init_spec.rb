@@ -13,53 +13,51 @@ describe 'ntpd' do
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to create_concat('/etc/ntp.conf') }
 
-        it {
+        it do
           is_expected.to create_concat__fragment('main_ntp_configuration')
-            .with_content(<<~MAIN_NTP_CONFIG,
-            logconfig =syncall +clockall
+            .with_content(<<~MAIN_NTP_CONFIG)
+              logconfig =syncall +clockall
 
-            tinker panic 0
+              tinker panic 0
 
-            restrict default kod nomodify notrap nopeer noquery
-            restrict -6 default kod nomodify notrap nopeer noquery
+              restrict default kod nomodify notrap nopeer noquery
+              restrict -6 default kod nomodify notrap nopeer noquery
 
-            restrict 127.0.0.1
-            restrict -6 ::1
+              restrict 127.0.0.1
+              restrict -6 ::1
 
-            server 127.127.1.0 # local clock
-            fudge 127.127.1.0 stratum 2
+              server 127.127.1.0 # local clock
+              fudge 127.127.1.0 stratum 2
 
 
-            driftfile /var/lib/ntp/drift
-            broadcastdelay 0.004
-            disable monitor
+              driftfile /var/lib/ntp/drift
+              broadcastdelay 0.004
+              disable monitor
             MAIN_NTP_CONFIG
-                         )
-        }
+        end
 
         it { is_expected.not_to contain_class('auditd') }
         it { is_expected.not_to contain_ntpd__allow('simp_default_ntpd_allow') }
         it { is_expected.to create_file('/etc/sysconfig/ntpd').with_content(%r{OPTIONS="-g"}) }
 
-        it {
+        it do
           is_expected.to create_file('/etc/sysconfig/ntpdate')
-            .with_content(<<~CONTENT,
-            # Configuration for the ntpdate script that runs at boot
-            # This file is managed by Puppet (module: ntpd)
-            # Options for ntpdate
-            OPTIONS="-p 2"
-            # Number of retries before giving up
-            RETRY=2
-            # Set to 'yes' to sync hw clock after successful ntpdate
-            SYNC_HWCLOCK=yes
+            .with_content(<<~CONTENT)
+              # Configuration for the ntpdate script that runs at boot
+              # This file is managed by Puppet (module: ntpd)
+              # Options for ntpdate
+              OPTIONS="-p 2"
+              # Number of retries before giving up
+             RETRY=2
+              # Set to 'yes' to sync hw clock after successful ntpdate
+              SYNC_HWCLOCK=yes
             CONTENT
-                         )
-        }
+        end
       end
 
       context 'when virtual' do
         let(:facts) do
-          os_facts.merge({ virtual: 'kvm' })
+          os_facts.merge(virtual: 'kvm')
         end
 
         it { is_expected.to compile.with_all_deps }
@@ -72,14 +70,13 @@ describe 'ntpd' do
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to create_class('auditd') }
 
-        it {
+        it do
           is_expected.to create_auditd__rule('ntp')
-            .with_content(<<~CONTENT,
+            .with_content(<<~CONTENT)
               -w /etc/ntp.conf -p wa -k CFG_ntp
               -w /etc/ntp/keys -p wa -k CFG_ntp
             CONTENT
-                         )
-        }
+        end
       end
 
       context 'with servers array' do
@@ -88,47 +85,45 @@ describe 'ntpd' do
             'servers' => [
               'time.bar.baz',
               'time.other.net',
-            ]
+            ],
           }
         end
 
         it { is_expected.to compile.with_all_deps }
 
-        it {
+        it do
           is_expected.to create_concat__fragment('main_ntp_configuration')
-            .with_content(<<~CONTENT,
-            logconfig =syncall +clockall
+            .with_content(<<~CONTENT)
+              logconfig =syncall +clockall
 
-            tinker panic 0
+              tinker panic 0
 
-            restrict default kod nomodify notrap nopeer noquery
-            restrict -6 default kod nomodify notrap nopeer noquery
+              restrict default kod nomodify notrap nopeer noquery
+              restrict -6 default kod nomodify notrap nopeer noquery
 
-            restrict 127.0.0.1
-            restrict -6 ::1
+              restrict 127.0.0.1
+              restrict -6 ::1
 
-            server 127.127.1.0 # local clock
-            fudge 127.127.1.0 stratum 10
+              server 127.127.1.0 # local clock
+              fudge 127.127.1.0 stratum 10
 
-            server time.bar.baz minpoll 4 maxpoll 4 iburst
-            server time.other.net minpoll 4 maxpoll 4 iburst
-            driftfile /var/lib/ntp/drift
-            broadcastdelay 0.004
-            disable monitor
+              server time.bar.baz minpoll 4 maxpoll 4 iburst
+              server time.other.net minpoll 4 maxpoll 4 iburst
+              driftfile /var/lib/ntp/drift
+              broadcastdelay 0.004
+              disable monitor
             CONTENT
-                         )
-        }
+        end
 
-        it {
+        it do
           is_expected.to create_file('/etc/ntp/step-tickers')
-            .with_content(<<~CONTENT,
-            # List of NTP servers used by the ntpdate service.
-            # This file is managed by Puppet (module: ntpd)
-            time.bar.baz
-            time.other.net
+            .with_content(<<~CONTENT)
+              # List of NTP servers used by the ntpdate service.
+              # This file is managed by Puppet (module: ntpd)
+              time.bar.baz
+              time.other.net
             CONTENT
-                         )
-        }
+        end
       end
 
       context 'with servers hash' do
@@ -136,53 +131,51 @@ describe 'ntpd' do
           {
             'servers' => {
               'time.bar.baz' => ['prefer'],
-              'time.other.net' => []
+              'time.other.net' => [],
             },
             'discard' => {
               'average' => 3,
-              'minimum' => 0
-            }
+              'minimum' => 0,
+            },
           }
         end
 
         it { is_expected.to compile.with_all_deps }
 
-        it {
+        it do
           is_expected.to create_concat__fragment('main_ntp_configuration')
-            .with_content(<<~CONTENT,
-            logconfig =syncall +clockall
+            .with_content(<<~CONTENT)
+              logconfig =syncall +clockall
 
-            tinker panic 0
+              tinker panic 0
 
-            discard average 3 minimum 0
-            restrict default kod nomodify notrap nopeer noquery
-            restrict -6 default kod nomodify notrap nopeer noquery
+              discard average 3 minimum 0
+              restrict default kod nomodify notrap nopeer noquery
+              restrict -6 default kod nomodify notrap nopeer noquery
 
-            restrict 127.0.0.1
-            restrict -6 ::1
+              restrict 127.0.0.1
+              restrict -6 ::1
 
-            server 127.127.1.0 # local clock
-            fudge 127.127.1.0 stratum 10
+              server 127.127.1.0 # local clock
+              fudge 127.127.1.0 stratum 10
 
-            server time.bar.baz prefer
-            server time.other.net minpoll 4 maxpoll 4 iburst
-            driftfile /var/lib/ntp/drift
-            broadcastdelay 0.004
-            disable monitor
+              server time.bar.baz prefer
+              server time.other.net minpoll 4 maxpoll 4 iburst
+              driftfile /var/lib/ntp/drift
+              broadcastdelay 0.004
+              disable monitor
             CONTENT
-                         )
-        }
+        end
 
-        it {
+        it do
           is_expected.to create_file('/etc/ntp/step-tickers')
-            .with_content(<<~CONTENT,
-            # List of NTP servers used by the ntpdate service.
-            # This file is managed by Puppet (module: ntpd)
-            time.bar.baz
-            time.other.net
+            .with_content(<<~CONTENT)
+              # List of NTP servers used by the ntpdate service.
+              # This file is managed by Puppet (module: ntpd)
+              time.bar.baz
+              time.other.net
             CONTENT
-                         )
-        }
+        end
       end
 
       context 'with servers array and without the local clock set' do
@@ -192,109 +185,105 @@ describe 'ntpd' do
               'time.bar.baz',
               'time.other.net',
             ],
-            'use_local_clock' => false
+            'use_local_clock' => false,
           }
         end
 
         it { is_expected.to compile.with_all_deps }
 
-        it {
+        it do
           is_expected.to create_concat__fragment('main_ntp_configuration')
-            .with_content(<<~CONTENT,
-            logconfig =syncall +clockall
+            .with_content(<<~CONTENT)
+              logconfig =syncall +clockall
 
-            tinker panic 0
+              tinker panic 0
 
-            restrict default kod nomodify notrap nopeer noquery
-            restrict -6 default kod nomodify notrap nopeer noquery
+              restrict default kod nomodify notrap nopeer noquery
+              restrict -6 default kod nomodify notrap nopeer noquery
 
-            restrict 127.0.0.1
-            restrict -6 ::1
+              restrict 127.0.0.1
+              restrict -6 ::1
 
-            server time.bar.baz minpoll 4 maxpoll 4 iburst
-            server time.other.net minpoll 4 maxpoll 4 iburst
-            driftfile /var/lib/ntp/drift
-            broadcastdelay 0.004
-            disable monitor
+              server time.bar.baz minpoll 4 maxpoll 4 iburst
+              server time.other.net minpoll 4 maxpoll 4 iburst
+              driftfile /var/lib/ntp/drift
+              broadcastdelay 0.004
+              disable monitor
             CONTENT
-                         )
-        }
+        end
 
-        it {
+        it do
           is_expected.to create_file('/etc/ntp/step-tickers')
-            .with_content(<<~CONTENT,
-            # List of NTP servers used by the ntpdate service.
-            # This file is managed by Puppet (module: ntpd)
-            time.bar.baz
-            time.other.net
+            .with_content(<<~CONTENT)
+              # List of NTP servers used by the ntpdate service.
+              # This file is managed by Puppet (module: ntpd)
+              time.bar.baz
+              time.other.net
             CONTENT
-                         )
-        }
+        end
       end
 
       context 'with extra content' do
         let(:params) do
           {
-            'extra_content' => "This is some\nextra content"
+            'extra_content' => "This is some\nextra content",
           }
         end
 
         it { is_expected.to compile.with_all_deps }
 
-        it {
+        it do
           is_expected.to create_concat__fragment('main_ntp_configuration')
-            .with_content(<<~CONTENT,
-            logconfig =syncall +clockall
+            .with_content(<<~CONTENT)
+              logconfig =syncall +clockall
 
-            tinker panic 0
+              tinker panic 0
 
-            restrict default kod nomodify notrap nopeer noquery
-            restrict -6 default kod nomodify notrap nopeer noquery
+              restrict default kod nomodify notrap nopeer noquery
+              restrict -6 default kod nomodify notrap nopeer noquery
 
-            restrict 127.0.0.1
-            restrict -6 ::1
+              restrict 127.0.0.1
+              restrict -6 ::1
 
-            server 127.127.1.0 # local clock
-            fudge 127.127.1.0 stratum 2
+              server 127.127.1.0 # local clock
+              fudge 127.127.1.0 stratum 2
 
 
-            driftfile /var/lib/ntp/drift
-            broadcastdelay 0.004
-            disable monitor
+              driftfile /var/lib/ntp/drift
+              broadcastdelay 0.004
+              disable monitor
 
-            # Begin raw user content
-            This is some
-            extra content
-            # End raw user content
+              # Begin raw user content
+              This is some
+              extra content
+              # End raw user content
             CONTENT
-                         )
-        }
+        end
       end
 
       context 'with fully user-defined content' do
         let(:params) do
           {
             'config_content' => 'This is all you get',
-            'extra_content' => "This is some\nextra content"
+            'extra_content' => "This is some\nextra content",
           }
         end
 
         it { is_expected.to compile.with_all_deps }
 
-        it {
+        it do
           is_expected.to create_concat__fragment('main_ntp_configuration')
-            .with_content(<<~CONTENT,
-            # Begin user-defined configuration
-            This is all you get
-            # End user-defined configuration
+            .with_content(<<~CONTENT)
+              # Begin user-defined configuration
+              This is all you get
+              # End user-defined configuration
             CONTENT
-                         )
-        }
+        end
       end
 
       context 'with servers and vmware' do
         let(:facts) do
-          os_facts.merge({ virtual: 'vmware' })
+          os_facts.merge(virtual: 'vmware')
         end
 
         let(:params) do
@@ -302,7 +291,7 @@ describe 'ntpd' do
             'servers' => [
               'time.bar.baz',
               'time.other.net',
-            ]
+            ],
           }
         end
 
@@ -322,7 +311,7 @@ describe 'ntpd' do
         context 'with just trusted_nets defined' do
           let(:params) do
             {
-              trusted_nets: ['127.0.0.1', 'localhost']
+              trusted_nets: ['127.0.0.1', 'localhost'],
             }
           end
 
@@ -335,7 +324,7 @@ describe 'ntpd' do
           let(:params) do
             {
               trusted_nets: ['127.0.0.1', 'localhost'],
-              default_restrict_rules: ['kod']
+              default_restrict_rules: ['kod'],
             }
           end
 
@@ -350,17 +339,17 @@ describe 'ntpd' do
 
         it { is_expected.to compile.with_all_deps }
 
-        it {
+        it do
           is_expected.to create_concat__fragment('main_ntp_configuration').with_content(
             %r{server time.bar.baz prefer},
           )
-        }
+        end
 
-        it {
+        it do
           is_expected.to create_concat__fragment('main_ntp_configuration').with_content(
             %r{server time.other.net minpoll 4 maxpoll 4 iburst},
           )
-        }
+        end
       end
 
       context 'with simp_options::ntpd::servers set' do
@@ -368,17 +357,17 @@ describe 'ntpd' do
 
         it { is_expected.to compile.with_all_deps }
 
-        it {
+        it do
           is_expected.to create_concat__fragment('main_ntp_configuration').with_content(
             %r{server time.foo.bar minpoll 4 maxpoll 4 iburst},
           )
-        }
+        end
 
-        it {
+        it do
           is_expected.to create_concat__fragment('main_ntp_configuration').with_content(
             %r{server time.foo.baz prefer},
           )
-        }
+        end
       end
     end
   end
