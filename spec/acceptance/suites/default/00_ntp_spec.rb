@@ -32,21 +32,23 @@ describe 'ntpd' do
       end
 
       describe file('/etc/ntp.conf') do
-        ntp_conf = File.read('spec/acceptance/suites/default/expected/ntp.conf.txt')
+        let(:ntp_conf) { File.read('spec/acceptance/suites/default/expected/ntp.conf.txt') }
 
         it { is_expected.to be_file }
         its(:content) { is_expected.to match(ntp_conf) }
       end
 
       describe file('/etc/ntp/step-tickers') do
-        step_tickers = <<~STEP_TICKERS
-          # List of NTP servers used by the ntpdate service.
-          # This file is managed by Puppet (module: ntpd)
-          0.rhel.pool.ntp.org
-          1.rhel.pool.ntp.org
-          2.rhel.pool.ntp.org
-          3.rhel.pool.ntp.org
-        STEP_TICKERS
+        let(:step_tickers) do
+          <<~STEP_TICKERS
+            # List of NTP servers used by the ntpdate service.
+            # This file is managed by Puppet (module: ntpd)
+            0.rhel.pool.ntp.org
+            1.rhel.pool.ntp.org
+            2.rhel.pool.ntp.org
+            3.rhel.pool.ntp.org
+          STEP_TICKERS
+        end
 
         it { is_expected.to be_file }
         its(:content) { is_expected.to match(step_tickers) }
@@ -64,7 +66,7 @@ describe 'ntpd' do
 
       describe file('/etc/sysconfig/ntpdate') do
         it { is_expected.to be_file }
-        its(:content) { is_expected.to match(%r{SYNC_HWCLOCK=yes}) }
+        its(:content) { is_expected.to include('SYNC_HWCLOCK=yes') }
       end
     end
   end
